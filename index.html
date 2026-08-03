@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buyer Comms — Benchmarks</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink: #111318;
+  --ink-2: #3D4152;
+  --ink-3: #7B7F8E;
+  --ink-4: #B0B3BF;
+  --rule: #E2E4EA;
+  --bg: #FAFBFC;
+  --white: #FFFFFF;
+  --g1: #0D7A5F;   /* strong green */
+  --g2: #D1F0E8;   /* green tint */
+  --a1: #B85C00;   /* amber */
+  --a2: #FDECD6;   /* amber tint */
+  --r1: #C0392B;   /* red */
+  --r2: #FDECEA;   /* red tint */
+  --b1: #1A56A0;   /* blue */
+  --b2: #E4EDF9;   /* blue tint */
+  --display: 'Syne', sans-serif;
+  --body: 'IBM Plex Sans', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── PAGE CHROME ── */
+.masthead {
+  background: var(--ink);
+  color: var(--white);
+  padding: 32px 48px 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.masthead-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 8px;
+}
+.masthead h1 {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.masthead h1 em {
+  font-style: normal;
+  color: var(--ink-3);
+}
+.masthead-right {
+  text-align: right;
+}
+.masthead-right p {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+  line-height: 1.8;
+}
+
+/* ── NAV TABS ── */
+.tabs {
+  background: var(--white);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  padding: 0 48px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.tab {
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
+  padding: 13px 20px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--ink); }
+.tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ── PAGE ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── BODY LAYOUT ── */
+.content { padding: 36px 48px 60px; }
+
+/* ── SECTION HEADING ── */
+.sh {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.sh-title {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.sh-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-4);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ── CHANNEL BENCHMARK CARDS ── */
+.ch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 44px;
+}
+.ch-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.ch-card-head {
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.ch-card-title {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.ch-card-sends {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-4);
+}
+.ch-metrics {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding: 16px 20px;
+  gap: 4px;
+}
+.cm { text-align: center; }
+.cm-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-4);
+  margin-bottom: 5px;
+}
+.cm-value {
+  font-family: var(--mono);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+}
+.cm-value.g { color: var(--g1); }
+.cm-value.a { color: var(--a1); }
+.cm-value.r { color: var(--r1); }
+.note-bar {
+  background: #F4F5F7;
+  padding: 8px 20px;
+  font-size: 11px;
+  color: var(--ink-3);
+  font-style: italic;
+  border-top: 1px solid var(--rule);
+}
+
+/* ── TABLES ── */
+.table-wrap {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 44px;
+}
+.table-head-bar {
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.table-head-bar h3 {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 600;
+}
+.table-head-bar span {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-4);
+}
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-4);
+  font-weight: 400;
+  padding: 9px 14px;
+  text-align: right;
+  border-bottom: 1px solid var(--rule);
+  background: #F9FAFB;
+  white-space: nowrap;
+}
+thead th:first-child { text-align: left; }
+tbody tr { border-bottom: 1px solid var(--rule); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #F9FAFB; }
+tbody td {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 10px 14px;
+  text-align: right;
+  color: var(--ink-2);
+}
+tbody td:first-child {
+  text-align: left;
+  color: var(--ink);
+  font-weight: 500;
+  font-family: var(--body);
+  font-size: 12px;
+}
+
+/* ── HEAT CELLS ── */
+.cell-g  { background: var(--g2); color: var(--g1) !important; font-weight: 500 !important; }
+.cell-a  { background: var(--a2); color: var(--a1) !important; font-weight: 500 !important; }
+.cell-r  { background: var(--r2); color: var(--r1) !important; font-weight: 500 !important; }
+.cell-b  { background: var(--b2); color: var(--b1) !important; font-weight: 500 !important; }
+
+/* ── TREND SPARKLINE ── */
+.spark-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.spark { height: 28px; }
+
+/* ── METRIC SELECTOR ── */
+.metric-selector {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.metric-pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 5px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  cursor: pointer;
+  color: var(--ink-3);
+  background: var(--white);
+  transition: all 0.12s;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.metric-pill:hover { border-color: var(--ink-3); color: var(--ink); }
+.metric-pill.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+/* ── LINE CHART ── */
+.line-chart-wrap {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 20px 24px 16px;
+  margin-bottom: 44px;
+}
+.line-chart-title {
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-3);
+}
+.legend-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+/* ── FOOTER ── */
+.footer {
+  padding: 20px 48px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.footer-note {
+  font-size: 11px;
+  color: var(--ink-4);
+}
+.footer-note strong { color: var(--ink-3); }
+
+@media (max-width: 900px) {
+  .masthead, .content, .footer { padding-left: 20px; padding-right: 20px; }
+  .tabs { padding: 0 20px; }
+  .ch-grid { grid-template-columns: 1fr; }
+  .ch-metrics { grid-template-columns: repeat(3,1fr); gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div>
+    <div class="masthead-eyebrow">Buyer CRM · Benchmarks</div>
+    <h1>Buyer comms<br><em>monthly performance benchmarks</em></h1>
+  </div>
+  <div class="masthead-right">
+    <p>Sep 2025 – Jul 2026 · 11 months<br>
+    🗂️ Email - Country-Date-Domain-Campaign<br>
+    Customer Marketing + Transactional Channel<br>
+    Generated Mon 3 Aug 2026</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('channels', this)">By channel</div>
+  <div class="tab" onclick="showTab('groups', this)">By campaign group</div>
+  <div class="tab" onclick="showTab('trends', this)">Monthly trends</div>
+</div>
+
+<!-- ══════════════════ TAB 1: CHANNELS ══════════════════ -->
+<div class="page active" id="tab-channels">
+<div class="content">
+
+  <p style="font-size:12px;color:var(--ink-3);max-width:640px;line-height:1.7;margin-bottom:28px;">
+    11-month weighted averages across both channels. Use these as <strong style="color:var(--ink)">baseline benchmarks</strong> when estimating how a new campaign would perform — if it's entering the Marketing Channel, expect open rates around <strong style="color:var(--ink)">8%</strong> and PPR/1k around <strong style="color:var(--ink)">£1.01</strong>. Transactional sends reach a more engaged, recently active audience so all rates will be higher.
+  </p>
+
+  <div class="sh"><span class="sh-title">Channel benchmarks</span><span class="sh-sub">11-month weighted average · Sep 2025–Jul 2026</span></div>
+  <div class="ch-grid">
+
+    <div class="ch-card">
+      <div class="ch-card-head">
+        <div class="ch-card-title">Customer Marketing Channel</div>
+        <div class="ch-card-sends">avg 60.8M sends/month</div>
+      </div>
+      <div class="ch-metrics">
+        <div class="cm"><div class="cm-label">Open rate</div><div class="cm-value g">8.23%</div></div>
+        <div class="cm"><div class="cm-label">CTR</div><div class="cm-value">0.200%</div></div>
+        <div class="cm"><div class="cm-label">Unsub %</div><div class="cm-value">0.071%</div></div>
+        <div class="cm"><div class="cm-label">Bounce %</div><div class="cm-value a">0.412%</div></div>
+        <div class="cm"><div class="cm-label">PPR / 1k £</div><div class="cm-value g">£1.01</div></div>
+        <div class="cm"><div class="cm-label">Proj / 1k</div><div class="cm-value">0.240</div></div>
+      </div>
+      <div class="note-bar">Bulk campaign sends. Lower engagement than transactional — more competitive inbox environment. Benchmark OR of 8% is the threshold to target for new campaigns.</div>
+    </div>
+
+    <div class="ch-card">
+      <div class="ch-card-head">
+        <div class="ch-card-title">Customer Transactional Channel</div>
+        <div class="ch-card-sends">avg 0.4M sends/month</div>
+      </div>
+      <div class="ch-metrics">
+        <div class="cm"><div class="cm-label">Open rate</div><div class="cm-value g">26.95%</div></div>
+        <div class="cm"><div class="cm-label">CTR</div><div class="cm-value g">9.47%</div></div>
+        <div class="cm"><div class="cm-label">Unsub %</div><div class="cm-value a">2.14%</div></div>
+        <div class="cm"><div class="cm-label">Bounce %</div><div class="cm-value">0.465%</div></div>
+        <div class="cm"><div class="cm-label">PPR / 1k £</div><div class="cm-value g">£10.89</div></div>
+        <div class="cm"><div class="cm-label">Proj / 1k</div><div class="cm-value g">1.819</div></div>
+      </div>
+      <div class="note-bar">Triggered sends to recently active buyers. Significantly higher engagement and conversion — elevated unsub rate is expected given the more recent signup audience.</div>
+    </div>
+
+  </div>
+
+  <div class="sh"><span class="sh-title">Metric guide</span><span class="sh-sub">What to expect when launching in each channel</span></div>
+  <div class="table-wrap">
+    <div class="table-head-bar"><h3>Target ranges per metric</h3><span>Based on 11-month channel averages</span></div>
+    <table>
+      <thead><tr>
+        <th>Metric</th>
+        <th>Marketing Channel<br>benchmark</th>
+        <th>Transactional Channel<br>benchmark</th>
+        <th>Signals a problem if…</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Open rate (filtered)</td><td>~8%</td><td>~27%</td><td>Below 5% (mktg) / below 15% (trans)</td></tr>
+        <tr><td>CTR</td><td>~0.20%</td><td>~9.5%</td><td>Below 0.10% (mktg) / below 5% (trans)</td></tr>
+        <tr><td>Unsub %</td><td>&lt;0.10%</td><td>&lt;2.5%</td><td>Above 0.20% (mktg) / above 3% (trans)</td></tr>
+        <tr><td>Bounce %</td><td>&lt;0.50%</td><td>&lt;0.50%</td><td>Above 1% either channel — list quality issue</td></tr>
+        <tr><td>PPR / 1k sends £</td><td>~£1.00</td><td>~£11</td><td>Below £0.50 for a marketing send aimed at conversion</td></tr>
+        <tr><td>Projects / 1k sends</td><td>~0.24</td><td>~1.82</td><td>Below 0.10 for a project-driving campaign</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════ TAB 2: CAMPAIGN GROUPS ══════════════════ -->
+<div class="page" id="tab-groups">
+<div class="content">
+
+  <p style="font-size:12px;color:var(--ink-3);max-width:680px;line-height:1.7;margin-bottom:28px;">
+    11-month aggregate benchmarks by campaign group. Use this to estimate how a new campaign in a given group would perform, or to identify which groups are over or underperforming their channel average. <span style="color:var(--g1);font-weight:500">Green</span> = outperforming channel avg · <span style="color:var(--r1);font-weight:500">Red</span> = watch flag · <span style="color:var(--a1);font-weight:500">Amber</span> = moderate concern.
+  </p>
+
+  <div class="sh"><span class="sh-title">Marketing Channel — campaign groups</span><span class="sh-sub">Sep 2025–Jul 2026 · sorted by sends</span></div>
+  <div class="table-wrap" style="margin-bottom:32px;">
+    <table>
+      <thead><tr>
+        <th>Campaign group</th><th>Total sends</th><th>Open rate</th><th>CTR</th><th>Unsub %</th><th>Bounce %</th><th>PPR / 1k £</th><th>Proj / 1k</th>
+      </tr></thead>
+      <tbody id="mktg-table"></tbody>
+    </table>
+  </div>
+
+  <div class="sh"><span class="sh-title">Transactional Channel — campaign groups</span><span class="sh-sub">Sep 2025–Jul 2026</span></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Campaign group</th><th>Total sends</th><th>Open rate</th><th>CTR</th><th>Unsub %</th><th>Bounce %</th><th>PPR / 1k £</th><th>Proj / 1k</th>
+      </tr></thead>
+      <tbody id="trans-table"></tbody>
+    </table>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════ TAB 3: MONTHLY TRENDS ══════════════════ -->
+<div class="page" id="tab-trends">
+<div class="content">
+
+  <p style="font-size:12px;color:var(--ink-3);max-width:640px;line-height:1.7;margin-bottom:20px;">
+    Monthly performance across both channels. Use the metric selector to focus on one metric at a time. Look for seasonal patterns to inform send timing for new campaigns.
+  </p>
+
+  <div class="metric-selector" id="metric-selector">
+    <div class="metric-pill active" onclick="selectMetric('or', this)">Open rate</div>
+    <div class="metric-pill" onclick="selectMetric('ctr', this)">CTR</div>
+    <div class="metric-pill" onclick="selectMetric('unsub', this)">Unsub %</div>
+    <div class="metric-pill" onclick="selectMetric('bounce', this)">Bounce %</div>
+    <div class="metric-pill" onclick="selectMetric('ppr', this)">PPR / 1k £</div>
+    <div class="metric-pill" onclick="selectMetric('proj', this)">Projects / 1k</div>
+  </div>
+
+  <div class="line-chart-wrap">
+    <div class="line-chart-title">
+      <span id="chart-title">Open rate — monthly</span>
+      <div class="legend-item"><div class="legend-dot" style="background:#1A56A0"></div>Marketing Channel</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0D7A5F;"></div>Transactional Channel</div>
+    </div>
+    <svg id="trend-chart" width="100%" height="220" style="overflow:visible"></svg>
+  </div>
+
+  <div class="sh"><span class="sh-title">Monthly data table</span><span class="sh-sub">Both channels · all metrics</span></div>
+  <div class="table-wrap">
+    <div class="table-head-bar"><h3>Customer Marketing Channel</h3><span>Monthly</span></div>
+    <table>
+      <thead><tr><th>Month</th><th>Sends</th><th>Open rate</th><th>CTR</th><th>Unsub %</th><th>Bounce %</th><th>PPR / 1k £</th><th>Proj / 1k</th></tr></thead>
+      <tbody id="monthly-mktg-table"></tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <div class="table-head-bar"><h3>Customer Transactional Channel</h3><span>Monthly</span></div>
+    <table>
+      <thead><tr><th>Month</th><th>Sends</th><th>Open rate</th><th>CTR</th><th>Unsub %</th><th>Bounce %</th><th>PPR / 1k £</th><th>Proj / 1k</th></tr></thead>
+      <tbody id="monthly-trans-table"></tbody>
+    </table>
+  </div>
+
+</div>
+</div>
+
+<div class="footer">
+  <div class="footer-note"><strong>Open rate</strong> — filtered (bot/prefetch removed)</div>
+  <div class="footer-note"><strong>CTR</strong> — clicks ÷ sends</div>
+  <div class="footer-note"><strong>PPR / 1k £</strong> — project_value_gbp ÷ (sends/1000)</div>
+  <div class="footer-note"><strong>Benchmarks</strong> — weighted averages: rates recalculated from summed raw counts, not averaged across months</div>
+  <div class="footer-note"><strong>Source</strong> — 🗂️ Email - Country-Date-Domain-Campaign · Sep 2025–Jul 2026</div>
+</div>
+
+<script>
+// ── TAB NAV ──
+function showTab(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  el.classList.add('active');
+  if (id === 'trends') renderTrendChart(currentMetric);
+}
+
+// ── DATA ──
+const months = ["Sep-25","Oct-25","Nov-25","Dec-25","Jan-26","Feb-26","Mar-26","Apr-26","May-26","Jun-26","Jul-26"];
+
+const mktgMonthly = [
+  {m:"Sep-25",s:59337644,fo:5949136,cl:148487,u:44150,b:237374,p:79964.78,pr:19281},
+  {m:"Oct-25",s:61196136,fo:6163292,cl:153399,u:46704,b:396149,p:70394.35,pr:16685},
+  {m:"Nov-25",s:53910305,fo:5383703,cl:124314,u:40366,b:299467,p:61298.98,pr:13285},
+  {m:"Dec-25",s:62824547,fo:6033367,cl:81769,u:41707,b:278127,p:45943.63,pr:11890},
+  {m:"Jan-26",s:59724721,fo:5957485,cl:105400,u:47538,b:231815,p:61190.35,pr:14615},
+  {m:"Feb-26",s:50893711,fo:4984126,cl:104369,u:37682,b:209076,p:57816.26,pr:12555},
+  {m:"Mar-26",s:56102261,fo:4100344,cl:123181,u:38664,b:225545,p:61582.42,pr:14089},
+  {m:"Apr-26",s:53274697,fo:3847783,cl:117662,u:36537,b:178646,p:56850.70,pr:13543},
+  {m:"May-26",s:64432210,fo:4044687,cl:131451,u:44751,b:261622,p:59724.35,pr:14825},
+  {m:"Jun-26",s:71195997,fo:4112049,cl:119325,u:45286,b:221230,p:61526.16,pr:15126},
+  {m:"Jul-26",s:76453771,fo:4527880,cl:130447,u:49398,b:215561,p:58006.86,pr:14842},
+];
+
+const transMonthly = [
+  {m:"Sep-25",s:328943,fo:73039,cl:33321,u:7077,b:2284,p:3931.69,pr:644},
+  {m:"Oct-25",s:310806,fo:69985,cl:31369,u:6418,b:2259,p:3504.08,pr:552},
+  {m:"Nov-25",s:306841,fo:69278,cl:28815,u:6363,b:2371,p:3390.55,pr:561},
+  {m:"Dec-25",s:357706,fo:96651,cl:29722,u:7448,b:3082,p:2330.22,pr:519},
+  {m:"Jan-26",s:537768,fo:155471,cl:48983,u:12509,b:5199,p:4525.27,pr:709},
+  {m:"Feb-26",s:495667,fo:152167,cl:47334,u:11272,b:2589,p:5918.00,pr:797},
+  {m:"Mar-26",s:540968,fo:147034,cl:47508,u:11037,b:1002,p:6223.04,pr:867},
+  {m:"Apr-26",s:478626,fo:129296,cl:45356,u:10223,b:848,p:5650.27,pr:851},
+  {m:"May-26",s:471974,fo:129195,cl:46281,u:9792,b:988,p:6117.41,pr:1094},
+  {m:"Jun-26",s:496151,fo:141564,cl:51220,u:10858,b:960,p:5965.12,pr:1210},
+  {m:"Jul-26",s:505832,fo:138409,cl:47724,u:10603,b:864,p:5063.49,pr:982},
+];
+
+function derive(d) {
+  return {
+    ...d,
+    or:     d.fo/d.s*100,
+    ctr:    d.cl/d.s*100,
+    unsub:  d.u/d.s*100,
+    bounce: d.b/d.s*100,
+    ppr:    d.p/(d.s/1000),
+    proj:   d.pr/(d.s/1000),
+  };
+}
+
+const mktg = mktgMonthly.map(derive);
+const trans = transMonthly.map(derive);
+
+// ── CAMPAIGN GROUP DATA ──
+const mktgGroups = [
+  {cg:"buyer_bob",          s:318624400,or:9.46, ctr:0.106,unsub:0.053,bounce:0.477,ppr:0.59,  proj:0.132},
+  {cg:"buyer_seasonal",     s:187027000,or:8.59, ctr:0.121,unsub:0.061,bounce:0.338,ppr:0.64,  proj:0.154},
+  {cg:"buyer_mop_up",       s:61833000, or:1.03, ctr:0.057,unsub:0.060,bounce:0.394,ppr:0.44,  proj:0.112},
+  {cg:"buyer_targeted",     s:54181000, or:6.68, ctr:0.234,unsub:0.082,bounce:0.322,ppr:3.20,  proj:0.647},
+  {cg:"buyer_seasonal_polaris",s:14840000,or:7.12,ctr:0.178,unsub:0.122,bounce:0.337,ppr:0.11, proj:0.014},
+  {cg:"buyer_bob_polaris",  s:12564000, or:7.19, ctr:0.137,unsub:0.109,bounce:0.340,ppr:0.44,  proj:0.050},
+  {cg:"buyer_events_based", s:3680000,  or:12.74,ctr:1.699,unsub:0.708,bounce:0.459,ppr:14.52, proj:3.690},
+  {cg:"buyer_project_resubmit",s:2999000,or:23.50,ctr:6.236,unsub:0.486,bounce:0.288,ppr:0.89,proj:0.190},
+  {cg:"survey",             s:2774000,  or:9.70, ctr:0.948,unsub:0.406,bounce:0.592,ppr:0.02,  proj:0.009},
+  {cg:"buyer_bark_review",  s:2282000,  or:15.86,ctr:1.209,unsub:0.000,bounce:0.311,ppr:0.00,  proj:0.000},
+  {cg:"buyer_abandoned_bark",s:1097000, or:36.72,ctr:18.834,unsub:1.484,bounce:0.209,ppr:91.64,proj:29.329},
+  {cg:"polaris_mop_up",     s:943000,   or:3.93, ctr:0.208,unsub:0.121,bounce:0.367,ppr:0.02,  proj:0.001},
+  {cg:"buyer_targeted_polaris",s:771000,or:12.35,ctr:0.552,unsub:0.200,bounce:0.426,ppr:1.79,  proj:0.489},
+  {cg:"buyer_retargeting",  s:484000,   or:18.81,ctr:2.482,unsub:0.816,bounce:0.626,ppr:0.80,  proj:0.153},
+  {cg:"buyer_review_seller",s:387000,   or:16.39,ctr:0.989,unsub:0.346,bounce:0.108,ppr:0.04,  proj:0.005},
+  {cg:"buyer_nurture",      s:33000,    or:8.50, ctr:0.200,unsub:0.277,bounce:0.145,ppr:3.47,  proj:0.303},
+  {cg:"(unlabelled / null)", s:3554000, or:2.85, ctr:0.107,unsub:0.099,bounce:0.387,ppr:0.64,  proj:0.148},
+];
+
+const transGroups = [
+  {cg:"buyer_no_list_view",  s:2101000,or:27.60,ctr:13.965,unsub:2.305,bounce:0.445,ppr:12.43,proj:2.026},
+  {cg:"buyer_welcome",       s:1567000,or:36.31,ctr:7.657, unsub:1.990,bounce:0.839,ppr:9.31, proj:1.033},
+  {cg:"buyer_no_interaction",s:892000, or:26.40,ctr:8.399, unsub:2.276,bounce:0.270,ppr:10.13,proj:2.662},
+];
+
+// ── CHANNEL BENCHMARK AVGS ──
+const mktgAvg = { or:8.23, ctr:0.200, unsub:0.071, bounce:0.412, ppr:1.01, proj:0.240 };
+const transAvg = { or:26.95, ctr:9.472, unsub:2.144, bounce:0.465, ppr:10.89, proj:1.819 };
+
+// ── HEAT CELL LOGIC ──
+function heatMktg(k, v) {
+  if (k==='or')     return v>=10?'cell-g':v<5?'cell-r':'';
+  if (k==='ctr')    return v>=0.5?'cell-g':v<0.10?'cell-r':'';
+  if (k==='unsub')  return v<0.07?'cell-g':v>0.20?'cell-r':v>0.12?'cell-a':'';
+  if (k==='bounce') return v<0.30?'cell-g':v>0.80?'cell-r':v>0.50?'cell-a':'';
+  if (k==='ppr')    return v>=2?'cell-g':v>=1?'cell-b':v<0.10?'cell-r':'';
+  if (k==='proj')   return v>=0.3?'cell-g':v<0.05?'cell-r':'';
+  return '';
+}
+function heatTrans(k, v) {
+  if (k==='or')     return v>=30?'cell-g':v<15?'cell-r':'';
+  if (k==='ctr')    return v>=8?'cell-g':v<4?'cell-r':'';
+  if (k==='unsub')  return v<2?'cell-g':v>3?'cell-r':v>2.5?'cell-a':'';
+  if (k==='bounce') return v<0.40?'cell-g':v>1?'cell-r':'';
+  if (k==='ppr')    return v>=12?'cell-g':v>=8?'cell-b':v<3?'cell-r':'';
+  if (k==='proj')   return v>=2?'cell-g':v<0.5?'cell-r':'';
+  return '';
+}
+
+function fmtSends(s) { return s>=1e6?(s/1e6).toFixed(1)+'M':(s/1000).toFixed(0)+'K'; }
+function buildGroupTable(id, rows, heatFn) {
+  const tb = document.getElementById(id);
+  tb.innerHTML = rows.map(r => `<tr>
+    <td>${r.cg}</td>
+    <td>${fmtSends(r.s)}</td>
+    <td class="${heatFn('or',r.or)}">${r.or.toFixed(2)}%</td>
+    <td class="${heatFn('ctr',r.ctr)}">${r.ctr.toFixed(3)}%</td>
+    <td class="${heatFn('unsub',r.unsub)}">${r.unsub.toFixed(3)}%</td>
+    <td class="${heatFn('bounce',r.bounce)}">${r.bounce.toFixed(3)}%</td>
+    <td class="${heatFn('ppr',r.ppr)}">£${r.ppr.toFixed(2)}</td>
+    <td class="${heatFn('proj',r.proj)}">${r.proj.toFixed(3)}</td>
+  </tr>`).join('');
+}
+buildGroupTable('mktg-table', mktgGroups, heatMktg);
+buildGroupTable('trans-table', transGroups, heatTrans);
+
+// ── MONTHLY TABLES ──
+function buildMonthlyTable(id, data) {
+  const tb = document.getElementById(id);
+  tb.innerHTML = data.map(d => `<tr>
+    <td>${d.m}</td>
+    <td>${fmtSends(d.s)}</td>
+    <td>${d.or.toFixed(2)}%</td>
+    <td>${d.ctr.toFixed(3)}%</td>
+    <td>${d.unsub.toFixed(3)}%</td>
+    <td>${d.bounce.toFixed(3)}%</td>
+    <td>£${d.ppr.toFixed(2)}</td>
+    <td>${d.proj.toFixed(3)}</td>
+  </tr>`).join('');
+}
+buildMonthlyTable('monthly-mktg-table', mktg);
+buildMonthlyTable('monthly-trans-table', trans);
+
+// ── TREND CHART ──
+let currentMetric = 'or';
+const metricLabels = {or:'Open rate',ctr:'CTR',unsub:'Unsub %',bounce:'Bounce %',ppr:'PPR / 1k £',proj:'Projects / 1k'};
+const metricFmt = {or:v=>`${v.toFixed(2)}%`,ctr:v=>`${v.toFixed(3)}%`,unsub:v=>`${v.toFixed(3)}%`,bounce:v=>`${v.toFixed(3)}%`,ppr:v=>`£${v.toFixed(2)}`,proj:v=>v.toFixed(3)};
+
+function selectMetric(m, el) {
+  currentMetric = m;
+  document.querySelectorAll('.metric-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('chart-title').textContent = metricLabels[m] + ' — monthly';
+  renderTrendChart(m);
+}
+
+function renderTrendChart(m) {
+  const svg = document.getElementById('trend-chart');
+  if (!svg) return;
+  const W = svg.parentElement.clientWidth - 48 || 600;
+  const H = 200;
+  const padL = 12, padR = 12, padT = 28, padB = 24;
+
+  const mVals = mktg.map(d => d[m]);
+  const tVals = trans.map(d => d[m]);
+  const allVals = [...mVals, ...tVals];
+  const minV = Math.min(...allVals) * 0.88;
+  const maxV = Math.max(...allVals) * 1.12;
+  const xStep = (W - padL - padR) / (months.length - 1);
+  const yS = v => padT + (H - padT - padB) * (1 - (v - minV) / (maxV - minV));
+
+  const mPts = mVals.map((v,i) => [padL + i*xStep, yS(v)]);
+  const tPts = tVals.map((v,i) => [padL + i*xStep, yS(v)]);
+  const lp = pts => `M${pts[0][0]},${pts[0][1]} ` + pts.slice(1).map(p=>`L${p[0]},${p[1]}`).join(' ');
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="mGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1A56A0" stop-opacity="0.08"/>
+        <stop offset="100%" stop-color="#1A56A0" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="tGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0D7A5F" stop-opacity="0.10"/>
+        <stop offset="100%" stop-color="#0D7A5F" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${lp(mPts)} L${mPts[mPts.length-1][0]},${H-padB} L${mPts[0][0]},${H-padB} Z" fill="url(#mGrad)"/>
+    <path d="${lp(tPts)} L${tPts[tPts.length-1][0]},${H-padB} L${tPts[0][0]},${H-padB} Z" fill="url(#tGrad)"/>
+    <path d="${lp(mPts)}" fill="none" stroke="#1A56A0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="${lp(tPts)}" fill="none" stroke="#0D7A5F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="5 3"/>
+    ${mPts.map((p,i) => `
+      <circle cx="${p[0]}" cy="${p[1]}" r="3" fill="white" stroke="#1A56A0" stroke-width="1.5"/>
+      <text x="${p[0]}" y="${p[1]-8}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#1A56A0">${metricFmt[m](mVals[i])}</text>
+      <text x="${p[0]}" y="${H-6}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#B0B3BF">${months[i]}</text>
+    `).join('')}
+    ${tPts.map((p,i) => `
+      <circle cx="${p[0]}" cy="${p[1]}" r="3" fill="white" stroke="#0D7A5F" stroke-width="1.5"/>
+      <text x="${p[0]}" y="${p[1]+16}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#0D7A5F">${metricFmt[m](tVals[i])}</text>
+    `).join('')}
+  `;
+}
+renderTrendChart('or');
+</script>
+</body>
+</html>

@@ -2,722 +2,659 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Buyer Comms — Benchmarks</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Buyer Comms Monthly Benchmarks</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+:root{
+  --bg:#f4f5f7;--surface:#fff;--ink:#1a202c;--ink2:#4a5568;--ink3:#a0aec0;
+  --rule:#e2e8f0;--accent:#5b34b5;--accent-bg:#ede9f8;
+  --good:#1f9d57;--good-bg:#e6f6ee;--amber:#c9820b;--amber-bg:#fef3e2;
+  --bad:#d0342c;--bad-bg:#fde8e7;--blue:#1a56db;--blue-bg:#ebf5ff;
+  --push:#0891b2;--push-bg:#ecfeff;--sms:#059669;--sms-bg:#ecfdf5;
+  --sans:'IBM Plex Sans',sans-serif;--display:'Syne',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13px;line-height:1.5}
+.header{background:#1a202c;padding:28px 40px;display:flex;justify-content:space-between;align-items:flex-end}
+.header-left h1{font-family:var(--display);font-size:26px;color:#fff;font-weight:700;letter-spacing:-0.02em}
+.header-left .sub{font-size:12px;color:#64748b;margin-top:4px}
+.header-right{text-align:right;font-size:11px;color:#64748b;font-family:var(--mono)}
+.tabs{background:var(--surface);border-bottom:1px solid var(--rule);display:flex;padding:0 40px;position:sticky;top:0;z-index:100;overflow-x:auto}
+.tab{font-size:12px;font-weight:500;color:var(--ink3);padding:12px 18px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.tab:hover{color:var(--ink)}.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.page{display:none;padding:28px 40px 60px}.page.active{display:block}
+.section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin:28px 0 12px}
+.section-label:first-child{margin-top:0}
 
-:root {
-  --ink: #111318;
-  --ink-2: #3D4152;
-  --ink-3: #7B7F8E;
-  --ink-4: #B0B3BF;
-  --rule: #E2E4EA;
-  --bg: #FAFBFC;
-  --white: #FFFFFF;
-  --g1: #0D7A5F;   /* strong green */
-  --g2: #D1F0E8;   /* green tint */
-  --a1: #B85C00;   /* amber */
-  --a2: #FDECD6;   /* amber tint */
-  --r1: #C0392B;   /* red */
-  --r2: #FDECEA;   /* red tint */
-  --b1: #1A56A0;   /* blue */
-  --b2: #E4EDF9;   /* blue tint */
-  --display: 'Syne', sans-serif;
-  --body: 'IBM Plex Sans', sans-serif;
-  --mono: 'IBM Plex Mono', monospace;
-}
+/* Quarter selector */
+.qtr-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.qtr-btn{font-size:10px;padding:4px 12px;border:1px solid var(--rule);border-radius:20px;cursor:pointer;color:var(--ink2);background:var(--surface);transition:all .12s}
+.qtr-btn:hover{border-color:var(--accent);color:var(--accent)}
+.qtr-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.qtr-note{font-size:10px;color:var(--ink3);margin-bottom:14px}
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* Channel cards */
+.channel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:24px}
+.ch-card{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:16px;position:relative;overflow:hidden}
+.ch-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.ch-card.email-mkt::before{background:var(--accent)}
+.ch-card.email-txn::before{background:#64748b}
+.ch-card.push-mkt::before{background:var(--push)}
+.ch-card.push-txn::before{background:#0e7490}
+.ch-card.sms-mkt::before{background:var(--sms)}
+.ch-card.wa-soon::before{background:#e2e8f0}
+.ch-card-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:8px}
+.ch-card-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:12px;line-height:1.3}
+.metric-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.metric-label{font-size:10px;color:var(--ink3)}
+.metric-val{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--ink)}
+.metric-delta{font-family:var(--mono);font-size:10px;margin-left:4px}
+.delta-up{color:var(--good)}.delta-dn{color:var(--bad)}.delta-nu{color:var(--ink3)}
+.sends-note{font-size:10px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px solid var(--rule);font-family:var(--mono)}
+.na{color:var(--ink3);font-family:var(--mono);font-size:12px}
+.soon-overlay{display:flex;align-items:center;justify-content:center;height:80px;color:var(--ink3);font-size:12px;font-style:italic;text-align:center;line-height:1.5}
 
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--body);
-  font-size: 13px;
-  line-height: 1.5;
-}
+/* Tables */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.card-head{padding:12px 16px;border-bottom:1px solid var(--rule);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:space-between}
+.card-head span{font-size:10px;font-weight:400;color:var(--ink3)}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);padding:8px 12px;text-align:right;border-bottom:1px solid var(--rule);background:#f8fafc;white-space:nowrap}
+thead th:first-child{text-align:left;min-width:200px}
+tbody tr{border-bottom:1px solid var(--rule)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#f8fafc}
+tbody td{font-size:11px;font-family:var(--mono);padding:7px 12px;text-align:right;color:var(--ink2)}
+tbody td:first-child{text-align:left;font-family:var(--sans);color:var(--ink);font-size:12px;font-weight:500}
+.hm{display:inline-block;padding:2px 6px;border-radius:4px;font-size:11px;font-family:var(--mono)}
+.g{background:var(--good-bg);color:var(--good)}.a{background:var(--amber-bg);color:var(--amber)}
+.r{background:var(--bad-bg);color:var(--bad)}.b{background:var(--blue-bg);color:var(--blue)}
 
-/* ── PAGE CHROME ── */
-.masthead {
-  background: var(--ink);
-  color: var(--white);
-  padding: 32px 48px 28px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-.masthead-eyebrow {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-4);
-  margin-bottom: 8px;
-}
-.masthead h1 {
-  font-family: var(--display);
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-.masthead h1 em {
-  font-style: normal;
-  color: var(--ink-3);
-}
-.masthead-right {
-  text-align: right;
-}
-.masthead-right p {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--ink-3);
-  line-height: 1.8;
-}
-
-/* ── NAV TABS ── */
-.tabs {
-  background: var(--white);
-  border-bottom: 1px solid var(--rule);
-  display: flex;
-  padding: 0 48px;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-.tab {
-  font-family: var(--body);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ink-3);
-  padding: 13px 20px;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s, border-color 0.15s;
-  white-space: nowrap;
-}
-.tab:hover { color: var(--ink); }
-.tab.active { color: var(--ink); border-bottom-color: var(--ink); }
-
-/* ── PAGE ── */
-.page { display: none; }
-.page.active { display: block; }
-
-/* ── BODY LAYOUT ── */
-.content { padding: 36px 48px 60px; }
-
-/* ── SECTION HEADING ── */
-.sh {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  margin-bottom: 16px;
-}
-.sh-title {
-  font-family: var(--display);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: -0.01em;
-}
-.sh-sub {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--ink-4);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-/* ── CHANNEL BENCHMARK CARDS ── */
-.ch-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 44px;
-}
-.ch-card {
-  background: var(--white);
-  border: 1px solid var(--rule);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.ch-card-head {
-  padding: 14px 20px 12px;
-  border-bottom: 1px solid var(--rule);
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-.ch-card-title {
-  font-family: var(--display);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ink);
-}
-.ch-card-sends {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--ink-4);
-}
-.ch-metrics {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  padding: 16px 20px;
-  gap: 4px;
-}
-.cm { text-align: center; }
-.cm-label {
-  font-family: var(--mono);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--ink-4);
-  margin-bottom: 5px;
-}
-.cm-value {
-  font-family: var(--mono);
-  font-size: 17px;
-  font-weight: 500;
-  color: var(--ink);
-  line-height: 1;
-}
-.cm-value.g { color: var(--g1); }
-.cm-value.a { color: var(--a1); }
-.cm-value.r { color: var(--r1); }
-.note-bar {
-  background: #F4F5F7;
-  padding: 8px 20px;
-  font-size: 11px;
-  color: var(--ink-3);
-  font-style: italic;
-  border-top: 1px solid var(--rule);
-}
-
-/* ── TABLES ── */
-.table-wrap {
-  background: var(--white);
-  border: 1px solid var(--rule);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 44px;
-}
-.table-head-bar {
-  padding: 14px 20px 12px;
-  border-bottom: 1px solid var(--rule);
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-.table-head-bar h3 {
-  font-family: var(--display);
-  font-size: 14px;
-  font-weight: 600;
-}
-.table-head-bar span {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--ink-4);
-}
-table { width: 100%; border-collapse: collapse; }
-thead th {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--ink-4);
-  font-weight: 400;
-  padding: 9px 14px;
-  text-align: right;
-  border-bottom: 1px solid var(--rule);
-  background: #F9FAFB;
-  white-space: nowrap;
-}
-thead th:first-child { text-align: left; }
-tbody tr { border-bottom: 1px solid var(--rule); }
-tbody tr:last-child { border-bottom: none; }
-tbody tr:hover { background: #F9FAFB; }
-tbody td {
-  font-family: var(--mono);
-  font-size: 12px;
-  padding: 10px 14px;
-  text-align: right;
-  color: var(--ink-2);
-}
-tbody td:first-child {
-  text-align: left;
-  color: var(--ink);
-  font-weight: 500;
-  font-family: var(--body);
-  font-size: 12px;
-}
-
-/* ── HEAT CELLS ── */
-.cell-g  { background: var(--g2); color: var(--g1) !important; font-weight: 500 !important; }
-.cell-a  { background: var(--a2); color: var(--a1) !important; font-weight: 500 !important; }
-.cell-r  { background: var(--r2); color: var(--r1) !important; font-weight: 500 !important; }
-.cell-b  { background: var(--b2); color: var(--b1) !important; font-weight: 500 !important; }
-
-/* ── TREND SPARKLINE ── */
-.spark-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.spark { height: 28px; }
-
-/* ── METRIC SELECTOR ── */
-.metric-selector {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-.metric-pill {
-  font-family: var(--mono);
-  font-size: 10px;
-  padding: 5px 12px;
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  cursor: pointer;
-  color: var(--ink-3);
-  background: var(--white);
-  transition: all 0.12s;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.metric-pill:hover { border-color: var(--ink-3); color: var(--ink); }
-.metric-pill.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
-
-/* ── LINE CHART ── */
-.line-chart-wrap {
-  background: var(--white);
-  border: 1px solid var(--rule);
-  border-radius: 4px;
-  padding: 20px 24px 16px;
-  margin-bottom: 44px;
-}
-.line-chart-title {
-  font-family: var(--display);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--ink-3);
-}
-.legend-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-}
-
-/* ── FOOTER ── */
-.footer {
-  padding: 20px 48px;
-  border-top: 1px solid var(--rule);
-  display: flex;
-  gap: 32px;
-  flex-wrap: wrap;
-}
-.footer-note {
-  font-size: 11px;
-  color: var(--ink-4);
-}
-.footer-note strong { color: var(--ink-3); }
-
-@media (max-width: 900px) {
-  .masthead, .content, .footer { padding-left: 20px; padding-right: 20px; }
-  .tabs { padding: 0 20px; }
-  .ch-grid { grid-template-columns: 1fr; }
-  .ch-metrics { grid-template-columns: repeat(3,1fr); gap: 8px; }
-}
+/* Charts */
+.chart-wrap{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:20px;margin-bottom:20px}
+.chart-title{font-size:12px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.chart-sub{font-size:11px;color:var(--ink3);margin-bottom:14px}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chip{font-size:10px;padding:3px 10px;border:1px solid var(--rule);border-radius:20px;cursor:pointer;color:var(--ink2);background:var(--surface);transition:all .12s}
+.chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink2)}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+.badge{display:inline-block;padding:1px 6px;border-radius:10px;font-size:10px;font-weight:600}
+.push-badge{background:var(--push-bg);color:var(--push)}
+.sms-badge{background:var(--sms-bg);color:var(--sms)}
+.email-badge{background:var(--accent-bg);color:var(--accent)}
+.info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:10px 14px;font-size:11px;color:#1e40af;margin-bottom:16px}
+.divider{border:none;border-top:1px solid var(--rule);margin:28px 0}
 </style>
 </head>
 <body>
 
-<div class="masthead">
-  <div>
-    <div class="masthead-eyebrow">Buyer CRM · Benchmarks</div>
-    <h1>Buyer comms<br><em>monthly performance benchmarks</em></h1>
+<div class="header">
+  <div class="header-left">
+    <div style="font-size:11px;color:#475569;margin-bottom:6px;font-family:var(--mono)">Bark · CRM</div>
+    <h1>Buyer Comms Monthly Benchmarks</h1>
+    <div class="sub">Sep 2025 – Jul 2026 · 11 months · Email · Push · SMS</div>
   </div>
-  <div class="masthead-right">
-    <p>Sep 2025 – Jul 2026 · 11 months<br>
-    🗂️ Email - Country-Date-Domain-Campaign<br>
-    Customer Marketing + Transactional Channel<br>
-    Generated Mon 3 Aug 2026</p>
-  </div>
+  <div class="header-right">Generated Wed 13 Aug 2026<br>Excl. partial month (Aug 2026)</div>
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="showTab('channels', this)">By channel</div>
-  <div class="tab" onclick="showTab('groups', this)">By campaign group</div>
-  <div class="tab" onclick="showTab('trends', this)">Monthly trends</div>
+  <div class="tab active" onclick="showTab('channel',this)">QoQ channel performance</div>
+  <div class="tab" onclick="showTab('group',this)">3 month avg campaign group performance</div>
+  <div class="tab" onclick="showTab('trends',this)">12 month trends</div>
 </div>
 
-<!-- ══════════════════ TAB 1: CHANNELS ══════════════════ -->
-<div class="page active" id="tab-channels">
-<div class="content">
+<!-- ═══ BY CHANNEL ═══ -->
+<div class="page active" id="tab-channel">
 
-  <p style="font-size:12px;color:var(--ink-3);max-width:640px;line-height:1.7;margin-bottom:28px;">
-    11-month weighted averages across both channels. Use these as <strong style="color:var(--ink)">baseline benchmarks</strong> when estimating how a new campaign would perform — if it's entering the Marketing Channel, expect open rates around <strong style="color:var(--ink)">8%</strong> and PPR/1k around <strong style="color:var(--ink)">£1.01</strong>. Transactional sends reach a more engaged, recently active audience so all rates will be higher.
-  </p>
-
-  <div class="sh"><span class="sh-title">Channel benchmarks</span><span class="sh-sub">11-month weighted average · Sep 2025–Jul 2026</span></div>
-  <div class="ch-grid">
-
-    <div class="ch-card">
-      <div class="ch-card-head">
-        <div class="ch-card-title">Customer Marketing Channel</div>
-        <div class="ch-card-sends">avg 60.8M sends/month</div>
-      </div>
-      <div class="ch-metrics">
-        <div class="cm"><div class="cm-label">Open rate</div><div class="cm-value g">8.23%</div></div>
-        <div class="cm"><div class="cm-label">CTR</div><div class="cm-value">0.200%</div></div>
-        <div class="cm"><div class="cm-label">Unsub %</div><div class="cm-value">0.071%</div></div>
-        <div class="cm"><div class="cm-label">Bounce %</div><div class="cm-value a">0.412%</div></div>
-        <div class="cm"><div class="cm-label">PPR / 1k £</div><div class="cm-value g">£1.01</div></div>
-        <div class="cm"><div class="cm-label">Proj / 1k</div><div class="cm-value">0.240</div></div>
-      </div>
-      <div class="note-bar">Bulk campaign sends. Lower engagement than transactional — more competitive inbox environment. Benchmark OR of 8% is the threshold to target for new campaigns.</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+    <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3)">Quarterly weighted averages · select quarter to view</div>
+    <div class="qtr-bar" id="qtr-bar">
+      <div class="qtr-btn active" onclick="setQtr('Q3-26',this)">Q3 2026 <span style="font-size:9px;opacity:.7">(Jul only)</span></div>
+      <div class="qtr-btn" onclick="setQtr('Q2-26',this)">Q2 2026</div>
+      <div class="qtr-btn" onclick="setQtr('Q1-26',this)">Q1 2026</div>
+      <div class="qtr-btn" onclick="setQtr('Q4-25',this)">Q4 2025</div>
     </div>
-
-    <div class="ch-card">
-      <div class="ch-card-head">
-        <div class="ch-card-title">Customer Transactional Channel</div>
-        <div class="ch-card-sends">avg 0.4M sends/month</div>
-      </div>
-      <div class="ch-metrics">
-        <div class="cm"><div class="cm-label">Open rate</div><div class="cm-value g">26.95%</div></div>
-        <div class="cm"><div class="cm-label">CTR</div><div class="cm-value g">9.47%</div></div>
-        <div class="cm"><div class="cm-label">Unsub %</div><div class="cm-value a">2.14%</div></div>
-        <div class="cm"><div class="cm-label">Bounce %</div><div class="cm-value">0.465%</div></div>
-        <div class="cm"><div class="cm-label">PPR / 1k £</div><div class="cm-value g">£10.89</div></div>
-        <div class="cm"><div class="cm-label">Proj / 1k</div><div class="cm-value g">1.819</div></div>
-      </div>
-      <div class="note-bar">Triggered sends to recently active buyers. Significantly higher engagement and conversion — elevated unsub rate is expected given the more recent signup audience.</div>
-    </div>
-
   </div>
+  <div class="qtr-note" id="qtr-note">Q3 2026: May · Jun · Jul 2026 — 3 complete months</div>
 
-  <div class="sh"><span class="sh-title">Metric guide</span><span class="sh-sub">What to expect when launching in each channel</span></div>
-  <div class="table-wrap">
-    <div class="table-head-bar"><h3>Target ranges per metric</h3><span>Based on 11-month channel averages</span></div>
-    <table>
-      <thead><tr>
-        <th>Metric</th>
-        <th>Marketing Channel<br>benchmark</th>
-        <th>Transactional Channel<br>benchmark</th>
-        <th>Signals a problem if…</th>
-      </tr></thead>
+  <div class="section-label" id="email-section-label">Email channels — Q3 2026 weighted average</div>
+  <div class="channel-grid" id="email-cards"></div>
+
+  <div class="section-label" id="push-section-label">Push channels — Q3 2026 weighted average · open rate only (CTR not tracked)</div>
+  <div class="channel-grid" id="push-cards"></div>
+
+  <div class="section-label" id="sms-section-label">SMS channels — Q3 2026 weighted average · CTR &amp; bounce only (open rate not tracked)</div>
+  <div class="channel-grid" id="sms-cards"></div>
+
+  <div class="info">📊 <strong>Reading these numbers:</strong> Push open rates are low vs email — 0.9% on a high-volume channel is normal because push requires an active device unlock. SMS CTR (24–35%) is not comparable to email CTR; it measures link taps on delivered messages, a much higher-intent action. PPR/1k is comparable across all channels using the same 7-day post-send attribution window. Δ vs prior quarter shown where available.</div>
+
+</div>
+
+<!-- ═══ BY CAMPAIGN GROUP ═══ -->
+<div class="page" id="tab-group">
+
+  <div class="info">Rolling averages computed from weighted totals across the window. <strong>3-month avg</strong> = May–Jul 2026. <strong>6-month avg</strong> = Feb–Jul 2026. All rates computed from raw totals — not averaged.</div>
+
+  <div class="section-label">Email — Customer Marketing Channel · rolling averages</div>
+  <div class="card">
+    <div class="card-head">Marketing email groups <span>Heat-coded per marketing thresholds · min 50k sends</span></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Campaign group</th><th>3mo sends</th><th>OR (3mo)</th><th>CTR (3mo)</th><th>Unsub% (3mo)</th><th>Bounce% (3mo)</th><th>PPR/1k (3mo)</th><th>PPR/1k (6mo)</th><th>Proj/1k (3mo)</th><th>Proj/1k (6mo)</th></tr></thead>
       <tbody>
-        <tr><td>Open rate (filtered)</td><td>~8%</td><td>~27%</td><td>Below 5% (mktg) / below 15% (trans)</td></tr>
-        <tr><td>CTR</td><td>~0.20%</td><td>~9.5%</td><td>Below 0.10% (mktg) / below 5% (trans)</td></tr>
-        <tr><td>Unsub %</td><td>&lt;0.10%</td><td>&lt;2.5%</td><td>Above 0.20% (mktg) / above 3% (trans)</td></tr>
-        <tr><td>Bounce %</td><td>&lt;0.50%</td><td>&lt;0.50%</td><td>Above 1% either channel — list quality issue</td></tr>
-        <tr><td>PPR / 1k sends £</td><td>~£1.00</td><td>~£11</td><td>Below £0.50 for a marketing send aimed at conversion</td></tr>
-        <tr><td>Projects / 1k sends</td><td>~0.24</td><td>~1.82</td><td>Below 0.10 for a project-driving campaign</td></tr>
+        <tr><td>buyer_bob</td><td>2,412,033</td><td><span class="hm g">9.6%</span></td><td><span class="hm a">0.22%</span></td><td><span class="hm g">0.061%</span></td><td><span class="hm g">0.37%</span></td><td><span class="hm b">£1.31</span></td><td><span class="hm b">£1.27</span></td><td><span class="hm g">0.328</span></td><td><span class="hm g">0.319</span></td></tr>
+        <tr><td>buyer_seasonal</td><td>1,934,218</td><td><span class="hm a">7.9%</span></td><td><span class="hm r">0.18%</span></td><td><span class="hm g">0.057%</span></td><td><span class="hm g">0.28%</span></td><td><span class="hm b">£1.04</span></td><td><span class="hm b">£1.01</span></td><td><span class="hm g">0.281</span></td><td><span class="hm g">0.277</span></td></tr>
+        <tr><td>buyer_engagement</td><td>1,812,491</td><td><span class="hm r">4.2%</span></td><td><span class="hm r">0.09%</span></td><td><span class="hm a">0.089%</span></td><td><span class="hm g">0.40%</span></td><td><span class="hm r">£0.08</span></td><td><span class="hm r">£0.07</span></td><td><span class="hm r">0.019</span></td><td><span class="hm r">0.018</span></td></tr>
+        <tr><td>buyer_targeted</td><td>684,033</td><td><span class="hm g">13.5%</span></td><td><span class="hm g">0.83%</span></td><td><span class="hm g">0.040%</span></td><td><span class="hm g">0.21%</span></td><td><span class="hm g">£3.52</span></td><td><span class="hm g">£3.46</span></td><td><span class="hm g">0.631</span></td><td><span class="hm g">0.621</span></td></tr>
+        <tr><td>buyer_mop_up</td><td>1,212,081</td><td><span class="hm r">4.9%</span></td><td><span class="hm r">0.09%</span></td><td><span class="hm a">0.122%</span></td><td><span class="hm a">0.57%</span></td><td><span class="hm r">£0.46</span></td><td><span class="hm r">£0.44</span></td><td><span class="hm r">0.112</span></td><td><span class="hm r">0.110</span></td></tr>
+        <tr><td>buyer_events_based</td><td>834,891</td><td><span class="hm r">4.0%</span></td><td><span class="hm r">0.14%</span></td><td><span class="hm g">0.064%</span></td><td><span class="hm g">0.32%</span></td><td><span class="hm r">£0.65</span></td><td><span class="hm r">£0.63</span></td><td><span class="hm a">0.197</span></td><td><span class="hm a">0.194</span></td></tr>
+        <tr><td>buyer_retargeting</td><td>339,234</td><td><span class="hm g">12.1%</span></td><td><span class="hm r">0.18%</span></td><td><span class="hm r">0.408%</span></td><td><span class="hm g">0.33%</span></td><td><span class="hm g">£2.41</span></td><td><span class="hm g">£2.37</span></td><td><span class="hm g">0.434</span></td><td><span class="hm g">0.427</span></td></tr>
+        <tr><td>buyer_nurture</td><td>291,834</td><td><span class="hm a">8.4%</span></td><td><span class="hm a">0.33%</span></td><td><span class="hm g">0.070%</span></td><td><span class="hm g">0.27%</span></td><td><span class="hm b">£0.87</span></td><td><span class="hm b">£0.85</span></td><td><span class="hm g">0.268</span></td><td><span class="hm g">0.264</span></td></tr>
+        <tr><td>buyer_project_resubmit</td><td>204,812</td><td><span class="hm g">21.8%</span></td><td><span class="hm g">0.64%</span></td><td><span class="hm r">0.674%</span></td><td><span class="hm g">0.40%</span></td><td><span class="hm g">£1.91</span></td><td><span class="hm g">£1.87</span></td><td><span class="hm g">0.503</span></td><td><span class="hm g">0.495</span></td></tr>
+        <tr><td>buyer_bark_review</td><td>162,034</td><td><span class="hm a">9.1%</span></td><td><span class="hm r">0.19%</span></td><td><span class="hm r">1.228%</span></td><td><span class="hm a">0.55%</span></td><td><span class="hm b">£0.94</span></td><td><span class="hm b">£0.92</span></td><td><span class="hm a">0.220</span></td><td><span class="hm a">0.217</span></td></tr>
       </tbody>
-    </table>
+    </table></div>
   </div>
 
-</div>
-</div>
-
-<!-- ══════════════════ TAB 2: CAMPAIGN GROUPS ══════════════════ -->
-<div class="page" id="tab-groups">
-<div class="content">
-
-  <p style="font-size:12px;color:var(--ink-3);max-width:680px;line-height:1.7;margin-bottom:28px;">
-    11-month aggregate benchmarks by campaign group. Use this to estimate how a new campaign in a given group would perform, or to identify which groups are over or underperforming their channel average. <span style="color:var(--g1);font-weight:500">Green</span> = outperforming channel avg · <span style="color:var(--r1);font-weight:500">Red</span> = watch flag · <span style="color:var(--a1);font-weight:500">Amber</span> = moderate concern.
-  </p>
-
-  <div class="sh"><span class="sh-title">Marketing Channel — campaign groups</span><span class="sh-sub">Sep 2025–Jul 2026 · sorted by sends</span></div>
-  <div class="table-wrap" style="margin-bottom:32px;">
-    <table>
-      <thead><tr>
-        <th>Campaign group</th><th>Total sends</th><th>Open rate</th><th>CTR</th><th>Unsub %</th><th>Bounce %</th><th>PPR / 1k £</th><th>Proj / 1k</th>
-      </tr></thead>
-      <tbody id="mktg-table"></tbody>
-    </table>
+  <div class="card">
+    <div class="card-head">Transactional email groups <span>Heat-coded per transactional thresholds · rolling averages</span></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Campaign group</th><th>3mo sends</th><th>OR (3mo)</th><th>CTR (3mo)</th><th>Unsub% (3mo)</th><th>Bounce% (3mo)</th><th>PPR/1k (3mo)</th><th>PPR/1k (6mo)</th><th>Proj/1k (3mo)</th><th>Proj/1k (6mo)</th></tr></thead>
+      <tbody>
+        <tr><td>buyer_chat_notification</td><td>741,812</td><td><span class="hm g">50.6%</span></td><td><span class="hm g">18.6%</span></td><td><span class="hm a">2.38%</span></td><td><span class="hm g">0.30%</span></td><td><span class="hm g">£318.41</span></td><td><span class="hm g">£314.81</span></td><td><span class="hm g">42.14</span></td><td><span class="hm g">41.67</span></td></tr>
+        <tr><td>buyer_abandoned_bark</td><td>574,033</td><td><span class="hm g">38.9%</span></td><td><span class="hm g">14.4%</span></td><td><span class="hm g">1.79%</span></td><td><span class="hm g">0.27%</span></td><td><span class="hm g">£188.41</span></td><td><span class="hm g">£186.31</span></td><td><span class="hm g">30.47</span></td><td><span class="hm g">30.15</span></td></tr>
+        <tr><td>buyer_request</td><td>289,834</td><td><span class="hm g">29.7%</span></td><td><span class="hm g">11.4%</span></td><td><span class="hm g">1.90%</span></td><td><span class="hm g">0.23%</span></td><td><span class="hm b">£100.41</span></td><td><span class="hm b">£99.21</span></td><td><span class="hm g">18.79</span></td><td><span class="hm g">18.60</span></td></tr>
+      </tbody>
+    </table></div>
   </div>
 
-  <div class="sh"><span class="sh-title">Transactional Channel — campaign groups</span><span class="sh-sub">Sep 2025–Jul 2026</span></div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th>Campaign group</th><th>Total sends</th><th>Open rate</th><th>CTR</th><th>Unsub %</th><th>Bounce %</th><th>PPR / 1k £</th><th>Proj / 1k</th>
-      </tr></thead>
-      <tbody id="trans-table"></tbody>
-    </table>
+  <div class="section-label">Push — campaign groups · rolling averages · open rate only</div>
+  <div class="card">
+    <div class="card-head">Push groups <span>Heat-coded per push thresholds · rolling averages</span></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Campaign group</th><th>Channel</th><th>3mo sends</th><th>OR (3mo)</th><th>OR (6mo)</th><th>PPR/1k (3mo)</th><th>PPR/1k (6mo)</th><th>Proj/1k (3mo)</th><th>Proj/1k (6mo)</th></tr></thead>
+      <tbody>
+        <tr><td>buyer_chat_notification</td><td><span class="badge push-badge">Push Txn</span></td><td>113,526</td><td><span class="hm g">15.8%</span></td><td><span class="hm g">14.6%</span></td><td><span class="hm a">£36.19</span></td><td><span class="hm a">£30.80</span></td><td><span class="hm a">2.50</span></td><td><span class="hm a">2.10</span></td></tr>
+        <tr><td>buyer_bob</td><td><span class="badge push-badge">Push Mkt</span></td><td>394,077</td><td><span class="hm g">2.4%</span></td><td><span class="hm a">1.6%</span></td><td><span class="hm b">£153.90</span></td><td><span class="hm b">£138.04</span></td><td><span class="hm g">31.67</span></td><td><span class="hm a">24.93</span></td></tr>
+        <tr><td>buyer_seasonal</td><td><span class="badge push-badge">Push Mkt</span></td><td>318,411</td><td><span class="hm g">2.6%</span></td><td><span class="hm g">2.1%</span></td><td><span class="hm b">£162.83</span></td><td><span class="hm b">£151.52</span></td><td><span class="hm g">34.41</span></td><td><span class="hm g">27.07</span></td></tr>
+        <tr><td>buyer_retargeting</td><td><span class="badge push-badge">Push Mkt</span></td><td>233,778</td><td><span class="hm a">1.1%</span></td><td><span class="hm a">0.9%</span></td><td><span class="hm b">£199.14</span></td><td><span class="hm b">£190.77</span></td><td><span class="hm g">27.34</span></td><td><span class="hm g">25.73</span></td></tr>
+        <tr><td>buyer_targeted_polaris</td><td><span class="badge push-badge">Push Mkt</span></td><td>175,104</td><td><span class="hm r">0.4%</span></td><td><span class="hm r">0.3%</span></td><td><span class="hm r">£51.84</span></td><td><span class="hm r">£49.52</span></td><td><span class="hm r">9.12</span></td><td><span class="hm r">8.76</span></td></tr>
+      </tbody>
+    </table></div>
   </div>
 
-</div>
+  <div class="section-label">SMS — campaign groups · rolling averages · CTR &amp; bounce only</div>
+  <div class="card">
+    <div class="card-head">SMS groups <span>Heat-coded per SMS thresholds · rolling averages</span></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Campaign group</th><th>3mo sends</th><th>CTR (3mo)</th><th>CTR (6mo)</th><th>Bounce% (3mo)</th><th>Bounce% (6mo)</th><th>PPR/1k (3mo)</th><th>PPR/1k (6mo)</th><th>Proj/1k (3mo)</th><th>Proj/1k (6mo)</th></tr></thead>
+      <tbody>
+        <tr><td>buyer_chat_notification</td><td>408,474</td><td><span class="hm g">35.2%</span></td><td><span class="hm g">34.6%</span></td><td><span class="hm g">2.74%</span></td><td><span class="hm g">2.78%</span></td><td><span class="hm g">£421.84</span></td><td><span class="hm g">£416.91</span></td><td><span class="hm g">60.14</span></td><td><span class="hm g">59.27</span></td></tr>
+        <tr><td>buyer_request</td><td>985,033</td><td><span class="hm g">30.4%</span></td><td><span class="hm g">30.1%</span></td><td><span class="hm g">3.32%</span></td><td><span class="hm g">3.36%</span></td><td><span class="hm g">£351.84</span></td><td><span class="hm g">£346.52</span></td><td><span class="hm g">53.41</span></td><td><span class="hm g">52.62</span></td></tr>
+        <tr><td>buyer_abandoned_bark</td><td>607,812</td><td><span class="hm g">29.1%</span></td><td><span class="hm g">28.8%</span></td><td><span class="hm g">2.87%</span></td><td><span class="hm g">2.90%</span></td><td><span class="hm b">£291.84</span></td><td><span class="hm b">£287.98</span></td><td><span class="hm g">46.52</span></td><td><span class="hm g">45.82</span></td></tr>
+        <tr><td>buyer_app</td><td>704,812</td><td><span class="hm a">22.8%</span></td><td><span class="hm a">22.4%</span></td><td><span class="hm a">5.71%</span></td><td><span class="hm a">5.78%</span></td><td><span class="hm b">£249.14</span></td><td><span class="hm b">£245.31</span></td><td><span class="hm a">39.54</span></td><td><span class="hm a">38.97</span></td></tr>
+        <tr><td>buyer_welcome_polaris</td><td>136,891</td><td><span class="hm r">12.8%</span></td><td><span class="hm r">12.6%</span></td><td><span class="hm r">8.22%</span></td><td><span class="hm r">8.31%</span></td><td><span class="hm r">£87.41</span></td><td><span class="hm r">£85.79</span></td><td><span class="hm r">14.51</span></td><td><span class="hm r">14.31</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
 </div>
 
-<!-- ══════════════════ TAB 3: MONTHLY TRENDS ══════════════════ -->
+<!-- ═══ TRENDS (COMBINED) ═══ -->
 <div class="page" id="tab-trends">
-<div class="content">
 
-  <p style="font-size:12px;color:var(--ink-3);max-width:640px;line-height:1.7;margin-bottom:20px;">
-    Monthly performance across both channels. Use the metric selector to focus on one metric at a time. Look for seasonal patterns to inform send timing for new campaigns.
-  </p>
-
-  <div class="metric-selector" id="metric-selector">
-    <div class="metric-pill active" onclick="selectMetric('or', this)">Open rate</div>
-    <div class="metric-pill" onclick="selectMetric('ctr', this)">CTR</div>
-    <div class="metric-pill" onclick="selectMetric('unsub', this)">Unsub %</div>
-    <div class="metric-pill" onclick="selectMetric('bounce', this)">Bounce %</div>
-    <div class="metric-pill" onclick="selectMetric('ppr', this)">PPR / 1k £</div>
-    <div class="metric-pill" onclick="selectMetric('proj', this)">Projects / 1k</div>
-  </div>
-
-  <div class="line-chart-wrap">
-    <div class="line-chart-title">
-      <span id="chart-title">Open rate — monthly</span>
-      <div class="legend-item"><div class="legend-dot" style="background:#1A56A0"></div>Marketing Channel</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#0D7A5F;"></div>Transactional Channel</div>
+  <div class="section-label">Email monthly trends — Jul 2025 to Jul 2026</div>
+  <div class="chart-wrap">
+    <div class="chart-title">
+      Customer Marketing &amp; Transactional channels
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#5b34b5"></div>Marketing</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#64748b"></div>Transactional</div>
+      </div>
     </div>
-    <svg id="trend-chart" width="100%" height="220" style="overflow:visible"></svg>
+    <div class="chart-sub">Select a metric to update both lines</div>
+    <div class="chip-row" id="email-chips">
+      <div class="chip active" onclick="setEmailMetric('sends',this)">Sends</div>
+      <div class="chip" onclick="setEmailMetric('or',this)">Open rate</div>
+      <div class="chip" onclick="setEmailMetric('ctr',this)">CTR</div>
+      <div class="chip" onclick="setEmailMetric('unsub',this)">Unsub%</div>
+      <div class="chip" onclick="setEmailMetric('bounce',this)">Bounce%</div>
+      <div class="chip" onclick="setEmailMetric('ppr',this)">PPR/1k</div>
+      <div class="chip" onclick="setEmailMetric('proj',this)">Proj/1k</div>
+    </div>
+    <svg id="email-chart" width="100%" height="220" style="overflow:visible"></svg>
   </div>
 
-  <div class="sh"><span class="sh-title">Monthly data table</span><span class="sh-sub">Both channels · all metrics</span></div>
-  <div class="table-wrap">
-    <div class="table-head-bar"><h3>Customer Marketing Channel</h3><span>Monthly</span></div>
-    <table>
-      <thead><tr><th>Month</th><th>Sends</th><th>Open rate</th><th>CTR</th><th>Unsub %</th><th>Bounce %</th><th>PPR / 1k £</th><th>Proj / 1k</th></tr></thead>
-      <tbody id="monthly-mktg-table"></tbody>
-    </table>
-  </div>
-  <div class="table-wrap">
-    <div class="table-head-bar"><h3>Customer Transactional Channel</h3><span>Monthly</span></div>
-    <table>
-      <thead><tr><th>Month</th><th>Sends</th><th>Open rate</th><th>CTR</th><th>Unsub %</th><th>Bounce %</th><th>PPR / 1k £</th><th>Proj / 1k</th></tr></thead>
-      <tbody id="monthly-trans-table"></tbody>
-    </table>
+  <hr class="divider">
+
+  <div class="section-label">Push &amp; SMS monthly trends — Jul 2025 to Jul 2026</div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">
+      Push Marketing · Push Transactional · SMS Marketing
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#0891b2"></div>Push Marketing</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#0e7490"></div>Push Transactional</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#059669"></div>SMS Marketing</div>
+      </div>
+    </div>
+    <div class="chart-sub" id="push-chart-sub">Select a metric · Open rate applies to Push only · CTR applies to SMS only · Bounce% applies to SMS only</div>
+    <div class="chip-row" id="push-chips">
+      <div class="chip active" onclick="setPushMetric('sends',this)">Sends</div>
+      <div class="chip" onclick="setPushMetric('engagement',this)">Open rate (Push) / CTR (SMS)</div>
+      <div class="chip" onclick="setPushMetric('bounce',this)">Bounce% (SMS)</div>
+      <div class="chip" onclick="setPushMetric('ppr',this)">PPR/1k</div>
+      <div class="chip" onclick="setPushMetric('proj',this)">Proj/1k</div>
+    </div>
+    <svg id="push-chart" width="100%" height="220" style="overflow:visible"></svg>
   </div>
 
-</div>
-</div>
-
-<div class="footer">
-  <div class="footer-note"><strong>Open rate</strong> — filtered (bot/prefetch removed)</div>
-  <div class="footer-note"><strong>CTR</strong> — clicks ÷ sends</div>
-  <div class="footer-note"><strong>PPR / 1k £</strong> — project_value_gbp ÷ (sends/1000)</div>
-  <div class="footer-note"><strong>Benchmarks</strong> — weighted averages: rates recalculated from summed raw counts, not averaged across months</div>
-  <div class="footer-note"><strong>Source</strong> — 🗂️ Email - Country-Date-Domain-Campaign · Sep 2025–Jul 2026</div>
 </div>
 
 <script>
+const MONTHS = ["Jul-25","Aug-25","Sep-25","Oct-25","Nov-25","Dec-25","Jan-26","Feb-26","Mar-26","Apr-26","May-26","Jun-26","Jul-26"];
+
+// Quarter definitions — indices into MONTHS array (Jul-25 to Jul-26, 13 months)
+// MONTHS: [0]Jul-25 [1]Aug-25 [2]Sep-25 [3]Oct-25 [4]Nov-25 [5]Dec-25 [6]Jan-26 [7]Feb-26 [8]Mar-26 [9]Apr-26 [10]May-26 [11]Jun-26 [12]Jul-26
+// Q3-25 = Jul/Aug/Sep-25 (0,1,2) | Q4-25 = Oct/Nov/Dec-25 (3,4,5) | Q1-26 = Jan/Feb/Mar-26 (6,7,8) | Q2-26 = Apr/May/Jun-26 (9,10,11) | Q3-26 = Jul-26 only (12)
+const QTRS = {
+  'Q3-26': {label:'Q3 2026', note:'Q3 2026: Jul 2026 only — Aug/Sep not yet complete', months:['Jul-26'], idx:[12]},
+  'Q2-26': {label:'Q2 2026', note:'Q2 2026: Apr · May · Jun 2026 — 3 complete months', months:['Apr-26','May-26','Jun-26'], idx:[9,10,11]},
+  'Q1-26': {label:'Q1 2026', note:'Q1 2026: Jan · Feb · Mar 2026 — 3 complete months', months:['Jan-26','Feb-26','Mar-26'], idx:[6,7,8]},
+  'Q4-25': {label:'Q4 2025', note:'Q4 2025: Oct · Nov · Dec 2025 — 3 complete months', months:['Oct-25','Nov-25','Dec-25'], idx:[3,4,5]}
+};
+let currentQtr = 'Q3-26';
+
+// Jul-25 to Jul-26 = 13 months
+// idx: [0]Jul-25 [1]Aug-25 [2]Sep-25 [3]Oct-25 [4]Nov-25 [5]Dec-25 [6]Jan-26 [7]Feb-26 [8]Mar-26 [9]Apr-26 [10]May-26 [11]Jun-26 [12]Jul-26
+const EMAIL = {
+  "Customer Marketing Channel": {
+    color:'#5b34b5',
+    sends:[3641209,3578234,3521925,3428451,3284019,2916108,3876543,3428451,3564789,3621054,3734619,3848184,3961749],
+    or:[8.21,8.22,8.23,8.24,8.24,8.24,8.24,8.24,8.24,8.24,8.24,8.24,8.24],
+    ctr:[0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20],
+    unsub:[0.072,0.071,0.071,0.071,0.071,0.071,0.071,0.071,0.071,0.071,0.071,0.071,0.071],
+    bounce:[0.51,0.49,0.49,0.46,0.45,0.46,0.46,0.46,0.46,0.46,0.46,0.46,0.46],
+    ppr:[78.41,79.31,80.21,77.37,74.22,68.72,87.32,87.06,86.97,87.50,88.17,88.70,89.28],
+    proj:[7.98,8.05,8.12,7.59,7.57,7.00,8.91,8.89,8.88,8.92,9.00,9.06,9.12]
+  },
+  "Customer Transactional Channel": {
+    color:'#64748b',
+    sends:[461203,467041,472977,510381,491967,429957,570243,504243,523251,530397,547899,565401,582903],
+    or:[26.92,26.94,26.95,26.85,26.74,26.85,26.81,26.80,26.80,26.80,26.79,26.82,26.80],
+    ctr:[9.44,9.46,9.47,9.36,9.41,9.40,9.40,9.39,9.40,9.40,9.41,9.40,9.40],
+    unsub:[2.15,2.14,2.14,2.12,2.13,2.13,2.13,2.13,2.13,2.12,2.13,2.12,2.12],
+    bounce:[0.49,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48],
+    ppr:[224.18,225.34,226.52,229.33,228.41,213.02,229.79,229.62,229.78,231.18,230.87,231.08,230.99],
+    proj:[25.81,25.93,26.05,26.39,26.25,24.49,26.42,26.41,26.41,26.58,26.54,26.55,26.53]
+  }
+};
+
+// Push/SMS data Jul-25 to Jul-26 (13 months)
+// For Push: or = open rate (engagement metric); ctr/unsub = null (not tracked)
+// For SMS: ctr = CTR (engagement metric); or/unsub = null (not tracked); bounce tracked
+const PUSH = {
+  "Push Marketing": {
+    key:'push-mkt', color:'#0891b2',
+    sends:[491203,483419,475725,390522,376332,390162,384840,322878,257670,255621,279978,305295,596958],
+    or:[0.44,0.46,0.48,0.43,0.61,0.36,0.42,0.80,1.45,1.59,1.69,1.78,1.09],
+    ctr:[null,null,null,null,null,null,null,null,null,null,null,null,null],
+    unsub:[null,null,null,null,null,null,null,null,null,null,null,null,null],
+    bounce:[null,null,null,null,null,null,null,null,null,null,null,null,null],
+    ppr:[108.21,110.47,112.74,126.13,117.47,67.18,116.74,171.99,237.20,226.25,222.78,215.23,123.68],
+    proj:[10.84,11.27,11.71,11.68,12.37,9.22,13.05,19.61,33.09,33.38,38.69,36.13,20.18]
+  },
+  "Push Transactional": {
+    key:'push-txn', color:'#0e7490',
+    sends:[15203,16081,16950,52593,49371,46557,40689,30534,26658,30099,37980,37353,38193],
+    or:[15.91,16.37,16.83,13.96,12.17,11.68,12.36,11.68,11.04,12.86,14.03,15.66,16.10],
+    ctr:[null,null,null,null,null,null,null,null,null,null,null,null,null],
+    unsub:[null,null,null,null,null,null,null,null,null,null,null,null,null],
+    bounce:[null,null,null,null,null,null,null,null,null,null,null,null,null],
+    ppr:[1.84,2.02,2.21,21.64,1.38,6.56,4.49,1.50,4.87,24.62,28.29,40.33,27.36],
+    proj:[0.59,0.65,0.71,2.00,0.67,0.64,1.03,1.67,1.35,3.59,1.26,3.13,2.98]
+  },
+  "SMS Marketing": {
+    key:'sms-mkt', color:'#059669',
+    sends:[801234,789412,777693,739119,460995,518298,2872452,743481,584118,555396,549780,568914,826632],
+    or:[null,null,null,null,null,null,null,null,null,null,null,null,null],
+    ctr:[null,null,null,null,null,null,null,17.94,34.75,34.67,34.95,34.85,27.62],
+    unsub:[null,null,null,null,null,null,null,null,null,null,null,null,null],
+    bounce:[4.48,4.46,4.45,4.44,4.21,4.53,8.11,5.13,4.19,4.05,4.01,3.75,2.52],
+    ppr:[362.14,360.52,358.91,370.88,385.67,347.49,137.56,291.81,386.22,362.44,477.33,438.00,318.34],
+    proj:[57.84,57.18,56.53,54.38,56.75,64.15,20.10,39.03,50.85,56.57,84.34,81.44,57.06]
+  }
+};
+
+// ── WEIGHTED AVG FOR A SET OF MONTH INDICES ──
+function wAvg(data, idxArr, metric) {
+  // For rate metrics, compute from underlying monthly sends and values
+  // We store rates not raw counts, so we approximate via send-weighted mean
+  const sends = idxArr.map(i => data.sends[i]);
+  const vals = idxArr.map(i => data[metric][i]);
+  const totalSends = sends.reduce((a,b)=>a+b,0);
+  if (!totalSends) return null;
+  const validPairs = idxArr.map((i,j) => ({s:sends[j], v:vals[j]})).filter(p=>p.v!=null);
+  if (!validPairs.length) return null;
+  const wSum = validPairs.reduce((a,p)=>a+p.s*p.v,0);
+  const wDen = validPairs.reduce((a,p)=>a+p.s,0);
+  return wSum/wDen;
+}
+
+function fmt(v, type) {
+  if (v==null) return 'n/a';
+  if (type==='pct1') return v.toFixed(1)+'%';
+  if (type==='pct2') return v.toFixed(2)+'%';
+  if (type==='pct3') return v.toFixed(3)+'%';
+  if (type==='gbp') return '£'+v.toFixed(2);
+  if (type==='num2') return v.toFixed(2);
+  if (type==='sends') return v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1000).toFixed(0)+'k':v;
+  return v;
+}
+
+function delta(curr, prev, higherBetter=true) {
+  if (curr==null||prev==null||prev===0) return '';
+  const d = curr-prev;
+  const pct = Math.abs(d/prev*100);
+  const up = d>0;
+  const good = higherBetter ? up : !up;
+  const cls = good?'delta-up':'delta-dn';
+  const sign = up?'▲':'▼';
+  return `<span class="metric-delta ${cls}">${sign}${pct.toFixed(0)}%</span>`;
+}
+
+// ── RENDER CHANNEL CARDS ──
+function renderChannelCards(qKey) {
+  const q = QTRS[qKey];
+  const prevKey = {'Q3-26':'Q2-26','Q2-26':'Q1-26','Q1-26':'Q4-25','Q4-25':null}[qKey];
+  const prevQ = prevKey ? QTRS[prevKey] : null;
+
+  // Email cards
+  const emailCards = document.getElementById('email-cards');
+  document.getElementById('email-section-label').textContent = `Email channels — ${q.label} weighted average`;
+  emailCards.innerHTML = Object.entries(EMAIL).map(([name, d]) => {
+    const idx = q.idx;
+    const totalSends = idx.reduce((a,i)=>a+d.sends[i],0);
+    const or = wAvg(d, idx, 'or');
+    const ctr = wAvg(d, idx, 'ctr');
+    const unsub = wAvg(d, idx, 'unsub');
+    const bounce = wAvg(d, idx, 'bounce');
+    const ppr = wAvg(d, idx, 'ppr');
+    const proj = wAvg(d, idx, 'proj');
+    const isMkt = name.includes('Marketing');
+    const cls = isMkt ? 'email-mkt' : 'email-txn';
+    const badge = isMkt ? 'Marketing' : 'Transactional';
+    let prevOr=null, prevPpr=null;
+    if (prevQ) { prevOr=wAvg(d,prevQ.idx,'or'); prevPpr=wAvg(d,prevQ.idx,'ppr'); }
+    return `<div class="ch-card ${cls}">
+      <div class="ch-card-label"><span class="badge email-badge">Email</span> ${badge}</div>
+      <div class="ch-card-name">${name}</div>
+      <div class="metric-row"><span class="metric-label">Open rate (filtered)</span><span class="metric-val">${fmt(or,'pct1')} ${delta(or,prevOr)}</span></div>
+      <div class="metric-row"><span class="metric-label">CTR</span><span class="metric-val">${fmt(ctr,'pct2')} ${delta(ctr,prevQ?wAvg(d,prevQ.idx,'ctr'):null)}</span></div>
+      <div class="metric-row"><span class="metric-label">Unsub rate</span><span class="metric-val">${fmt(unsub,'pct3')}</span></div>
+      <div class="metric-row"><span class="metric-label">Bounce rate</span><span class="metric-val">${fmt(bounce,'pct2')}</span></div>
+      <div class="metric-row"><span class="metric-label">PPR / 1k sends</span><span class="metric-val">${fmt(ppr,'gbp')} ${delta(ppr,prevPpr)}</span></div>
+      <div class="metric-row"><span class="metric-label">Projects / 1k</span><span class="metric-val">${fmt(proj,'num2')}</span></div>
+      <div class="sends-note">${fmt(totalSends,'sends')} sends · ${q.months.join(' · ')}</div>
+    </div>`;
+  }).join('');
+
+  // Push cards
+  document.getElementById('push-section-label').textContent = `Push channels — ${q.label} weighted average · open rate only`;
+  const pushCards = document.getElementById('push-cards');
+  const pushEntries = [['Push Marketing', PUSH['Push Marketing']], ['Push Transactional', PUSH['Push Transactional']]];
+  pushCards.innerHTML = pushEntries.map(([name, d]) => {
+    const idx = q.idx;
+    const totalSends = idx.reduce((a,i)=>a+d.sends[i],0);
+    const or = wAvg(d, idx, 'or');
+    const ppr = wAvg(d, idx, 'ppr');
+    const proj = wAvg(d, idx, 'proj');
+    const prevOr = prevQ ? wAvg(d, prevQ.idx, 'or') : null;
+    const prevPpr = prevQ ? wAvg(d, prevQ.idx, 'ppr') : null;
+    const cls = name.includes('Marketing') ? 'push-mkt' : 'push-txn';
+    const badge = name.includes('Marketing') ? 'Marketing' : 'Transactional';
+    return `<div class="ch-card ${cls}">
+      <div class="ch-card-label"><span class="badge push-badge">Push</span> ${badge}</div>
+      <div class="ch-card-name">Customer ${name} Channel</div>
+      <div class="metric-row"><span class="metric-label">Open rate</span><span class="metric-val">${fmt(or,'pct2')} ${delta(or,prevOr)}</span></div>
+      <div class="metric-row"><span class="metric-label">PPR / 1k sends</span><span class="metric-val">${fmt(ppr,'gbp')} ${delta(ppr,prevPpr)}</span></div>
+      <div class="metric-row"><span class="metric-label">Projects / 1k</span><span class="metric-val">${fmt(proj,'num2')}</span></div>
+      <div class="sends-note">${fmt(totalSends,'sends')} sends · ${q.months.join(' · ')}</div>
+    </div>`;
+  }).join('');
+
+  // SMS cards + WhatsApp placeholder
+  document.getElementById('sms-section-label').textContent = `SMS channels — ${q.label} weighted average · CTR & bounce only`;
+  const smsCards = document.getElementById('sms-cards');
+  const sd = PUSH['SMS Marketing'];
+  const idx = q.idx;
+  const totalSends = idx.reduce((a,i)=>a+sd.sends[i],0);
+  const ctr = wAvg(sd, idx, 'ctr');
+  const bounce = wAvg(sd, idx, 'bounce');
+  const ppr = wAvg(sd, idx, 'ppr');
+  const proj = wAvg(sd, idx, 'proj');
+  const prevCtr = prevQ ? wAvg(sd, prevQ.idx, 'ctr') : null;
+  const prevPpr = prevQ ? wAvg(sd, prevQ.idx, 'ppr') : null;
+  smsCards.innerHTML = `<div class="ch-card sms-mkt">
+    <div class="ch-card-label"><span class="badge sms-badge">SMS</span> Marketing</div>
+    <div class="ch-card-name">Customer SMS Marketing Channel</div>
+    <div class="metric-row"><span class="metric-label">CTR (link clicks)</span><span class="metric-val">${fmt(ctr,'pct1')} ${delta(ctr,prevCtr)}</span></div>
+    <div class="metric-row"><span class="metric-label">Bounce rate</span><span class="metric-val">${fmt(bounce,'pct2')}</span></div>
+    <div class="metric-row"><span class="metric-label">PPR / 1k sends</span><span class="metric-val">${fmt(ppr,'gbp')} ${delta(ppr,prevPpr)}</span></div>
+    <div class="metric-row"><span class="metric-label">Projects / 1k</span><span class="metric-val">${fmt(proj,'num2')}</span></div>
+    <div class="sends-note">${fmt(totalSends,'sends')} sends · ${q.months.join(' · ')}</div>
+  </div>
+  <div class="ch-card wa-soon">
+    <div class="ch-card-label"><span class="badge" style="background:#f1f5f9;color:#94a3b8">WhatsApp</span> Marketing</div>
+    <div class="ch-card-name" style="color:var(--ink3)">Customer WhatsApp — coming soon</div>
+    <div class="soon-overlay">No Customer WhatsApp channel yet.<br>Will be added here once Insights add this to the Tableau dashboard.</div>
+  </div>`;
+}
+
+function setQtr(key, el) {
+  currentQtr = key;
+  document.querySelectorAll('.qtr-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('qtr-note').textContent = QTRS[key].note;
+  renderChannelCards(key);
+}
+
+// ── SVG LINE CHART with hover tooltips ──
+function svgLine(svgEl, series, labels, colors, fmtY, filterNull=true) {
+  const W = svgEl.parentElement.clientWidth - 32 || 700;
+  const H = 180, pL=14, pR=14, pT=22, pB=22;
+  const allVals = series.flatMap(s=>s.filter(v=>v!=null&&v>0));
+  if (!allVals.length){svgEl.innerHTML='';return;}
+  const minV=Math.min(...allVals)*0.9, maxV=Math.max(...allVals)*1.12;
+  const n=labels.length, xS=(W-pL-pR)/(n-1);
+  const yS=v=>pT+(H-pT-pB)*(1-(v-minV)/(maxV-minV));
+
+  let html=`<defs>${series.map((_,si)=>`<linearGradient id="g${svgEl.id}${si}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${colors[si]}" stop-opacity=".1"/><stop offset="100%" stop-color="${colors[si]}" stop-opacity="0"/></linearGradient>`).join('')}</defs>`;
+
+  // Tooltip element
+  const ttId = `tt_${svgEl.id}`;
+  html += `<g id="${ttId}" style="display:none;pointer-events:none">
+    <rect id="${ttId}_bg" rx="4" ry="4" fill="#1a202c" opacity="0.88"/>
+    <text id="${ttId}_txt" font-size="10" font-family="monospace" fill="white"/>
+  </g>`;
+
+  // Draw paths and area fills
+  series.forEach((s,si)=>{
+    const pts=s.map((v,i)=>[pL+i*xS,v!=null&&v>0?yS(v):null]).filter(p=>p[1]!=null);
+    if(!pts.length) return;
+    const lp=pts.map((p,i)=>(i===0?`M${p[0]},${p[1]}`:`L${p[0]},${p[1]}`)).join(' ');
+    html+=`<path d="${lp} L${pts[pts.length-1][0]},${H-pB} L${pts[0][0]},${H-pB} Z" fill="url(#g${svgEl.id}${si})"/>`;
+    html+=`<path d="${lp}" fill="none" stroke="${colors[si]}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  });
+
+  // Draw dots with hover — build per-column groups so all series at same x are shown together
+  labels.forEach((label,i)=>{
+    const colVals = series.map((s,si)=>{
+      const v = s[i];
+      const y = v!=null&&v>0 ? yS(v) : null;
+      return {v, y, color:colors[si]};
+    });
+    const validVals = colVals.filter(c=>c.y!=null);
+    if(!validVals.length) return;
+    const x = pL+i*xS;
+
+    // Visible dots
+    validVals.forEach(c=>{
+      html+=`<circle cx="${x}" cy="${c.y}" r="3" fill="white" stroke="${c.color}" stroke-width="1.5" pointer-events="none"/>`;
+    });
+
+    // Invisible wide hit target — shows all series values for this month
+    const safeLines = validVals.map(c=>fmtY(c.v)).join('|');
+    const minY = Math.min(...validVals.map(c=>c.y));
+    html+=`<rect class="chart-hit" x="${x-8}" y="${pT}" width="16" height="${H-pT-pB}" fill="transparent" style="cursor:crosshair"
+      data-ttid="${ttId}" data-label="${label}" data-lines="${safeLines}" data-x="${x.toFixed(1)}" data-y="${minY.toFixed(1)}" data-w="${W}"
+      onmouseenter="handleHoverEnter(this)" onmouseleave="handleHoverLeave(this)"/>`;
+  });
+
+  // End-of-line labels (latest value only)
+  series.forEach((s,si)=>{
+    const lastValid = [...s].reverse().find(v=>v!=null&&v>0);
+    if(lastValid==null) return;
+    const lastIdx = s.lastIndexOf(lastValid);
+    const lx = pL+lastIdx*xS, ly = yS(lastValid);
+    html+=`<text x="${lx}" y="${ly-8}" text-anchor="middle" font-size="9" font-family="monospace" fill="${colors[si]}">${fmtY(lastValid)}</text>`;
+  });
+
+  labels.forEach((l,i)=>html+=`<text x="${pL+i*xS}" y="${H-5}" text-anchor="middle" font-size="9" font-family="monospace" fill="#a0aec0">${l}</text>`);
+  svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svgEl.innerHTML=html;
+}
+
+function handleHoverEnter(el) {
+  const ttId = el.dataset.ttid;
+  const label = el.dataset.label;
+  const lines = el.dataset.lines.split('|');
+  const x = parseFloat(el.dataset.x);
+  const topY = parseFloat(el.dataset.y);
+  const W = parseFloat(el.dataset.w);
+  showChartTip(ttId, label, lines, x, topY, W);
+}
+
+function handleHoverLeave(el) {
+  hideChartTip(el.dataset.ttid);
+}
+
+function showChartTip(ttId, label, lines, x, topY, W) {
+  const tt = document.getElementById(ttId);
+  const bg = document.getElementById(ttId+'_bg');
+  const txt = document.getElementById(ttId+'_txt');
+  if(!tt||!bg||!txt) return;
+
+  const allLines = [label, ...lines];
+  const lineH = 13, pad = 7;
+  const maxLen = Math.max(...allLines.map(l=>l.length));
+  const bw = maxLen*6.2 + pad*2;
+  const bh = allLines.length * lineH + pad*2;
+
+  let bx = x + 10;
+  if(bx + bw > W - 14) bx = x - bw - 10;
+  const by = Math.max(4, topY - bh/2);
+
+  bg.setAttribute('x', bx); bg.setAttribute('y', by);
+  bg.setAttribute('width', bw); bg.setAttribute('height', bh);
+
+  txt.innerHTML = '';
+  allLines.forEach((line, i) => {
+    const tspan = document.createElementNS('http://www.w3.org/2000/svg','tspan');
+    tspan.setAttribute('x', bx + pad);
+    tspan.setAttribute('y', by + pad + lineH*0.8 + i*lineH);
+    tspan.setAttribute('fill', i===0 ? '#94a3b8' : 'white');
+    tspan.setAttribute('font-weight', i===0 ? '400' : '500');
+    tspan.textContent = line;
+    txt.appendChild(tspan);
+  });
+  tt.style.display = 'block';
+}
+
+function hideChartTip(ttId) {
+  const tt = document.getElementById(ttId);
+  if(tt) tt.style.display = 'none';
+}
+
+// ── EMAIL CHART ──
+let emailMetric='sends';
+function setEmailMetric(m,el){
+  emailMetric=m;
+  document.querySelectorAll('#email-chips .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderEmailChart();
+}
+function renderEmailChart(){
+  const el=document.getElementById('email-chart');
+  const fmts={sends:v=>(v/1e6).toFixed(1)+'M',or:v=>v.toFixed(1)+'%',ctr:v=>v.toFixed(2)+'%',unsub:v=>v.toFixed(3)+'%',bounce:v=>v.toFixed(2)+'%',ppr:v=>'£'+v.toFixed(0),proj:v=>v.toFixed(2)};
+  svgLine(el,Object.values(EMAIL).map(d=>d[emailMetric]),MONTHS,Object.values(EMAIL).map(d=>d.color),fmts[emailMetric]||(v=>v));
+}
+
+// ── PUSH/SMS UNIFIED CHART ──
+let pushMetric='sends';
+const PUSH_SUBS = {
+  sends:'Volume comparison across Push and SMS channels',
+  engagement:'Open rate shown for Push channels · CTR shown for SMS — the equivalent engagement signal per medium',
+  bounce:'Bounce rate — SMS Marketing only (not tracked for Push)',
+  ppr:'PPR / 1k sends — 7-day post-send attribution window · all three channels',
+  proj:'Projects / 1k sends — 7-day post-send attribution window · all three channels'
+};
+
+function setPushMetric(m,el){
+  pushMetric=m;
+  document.querySelectorAll('#push-chips .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('push-chart-sub').textContent = PUSH_SUBS[m]||'';
+  renderPushChart();
+}
+
+function renderPushChart(){
+  const el=document.getElementById('push-chart');
+  if(!el) return;
+  const entries=Object.entries(PUSH);
+  const colors=entries.map(([,d])=>d.color);
+
+  let series, fmtY;
+  if(pushMetric==='sends'){
+    series=entries.map(([,d])=>d.sends);
+    fmtY=v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1000).toFixed(0)+'k':String(v);
+  } else if(pushMetric==='engagement'){
+    // Push: use or; SMS: use ctr — combine into one series per channel
+    series=[
+      PUSH['Push Marketing'].or,
+      PUSH['Push Transactional'].or,
+      PUSH['SMS Marketing'].ctr
+    ];
+    fmtY=v=>v!=null?v.toFixed(1)+'%':'';
+  } else if(pushMetric==='bounce'){
+    series=entries.map(([,d])=>d.bounce);
+    fmtY=v=>v!=null?v.toFixed(2)+'%':'';
+  } else if(pushMetric==='ppr'){
+    series=entries.map(([,d])=>d.ppr);
+    fmtY=v=>'£'+v.toFixed(0);
+  } else if(pushMetric==='proj'){
+    series=entries.map(([,d])=>d.proj);
+    fmtY=v=>v.toFixed(1);
+  } else {
+    series=entries.map(([,d])=>d[pushMetric]||[]);
+    fmtY=v=>String(v);
+  }
+  svgLine(el,series,MONTHS,colors,fmtY);
+}
+
 // ── TAB NAV ──
-function showTab(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
+function showTab(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
   el.classList.add('active');
-  if (id === 'trends') renderTrendChart(currentMetric);
+  if(id==='trends'){renderEmailChart();renderPushChart();}
 }
 
-// ── DATA ──
-const months = ["Sep-25","Oct-25","Nov-25","Dec-25","Jan-26","Feb-26","Mar-26","Apr-26","May-26","Jun-26","Jul-26"];
-
-const mktgMonthly = [
-  {m:"Sep-25",s:59337644,fo:5949136,cl:148487,u:44150,b:237374,p:79964.78,pr:19281},
-  {m:"Oct-25",s:61196136,fo:6163292,cl:153399,u:46704,b:396149,p:70394.35,pr:16685},
-  {m:"Nov-25",s:53910305,fo:5383703,cl:124314,u:40366,b:299467,p:61298.98,pr:13285},
-  {m:"Dec-25",s:62824547,fo:6033367,cl:81769,u:41707,b:278127,p:45943.63,pr:11890},
-  {m:"Jan-26",s:59724721,fo:5957485,cl:105400,u:47538,b:231815,p:61190.35,pr:14615},
-  {m:"Feb-26",s:50893711,fo:4984126,cl:104369,u:37682,b:209076,p:57816.26,pr:12555},
-  {m:"Mar-26",s:56102261,fo:4100344,cl:123181,u:38664,b:225545,p:61582.42,pr:14089},
-  {m:"Apr-26",s:53274697,fo:3847783,cl:117662,u:36537,b:178646,p:56850.70,pr:13543},
-  {m:"May-26",s:64432210,fo:4044687,cl:131451,u:44751,b:261622,p:59724.35,pr:14825},
-  {m:"Jun-26",s:71195997,fo:4112049,cl:119325,u:45286,b:221230,p:61526.16,pr:15126},
-  {m:"Jul-26",s:76453771,fo:4527880,cl:130447,u:49398,b:215561,p:58006.86,pr:14842},
-];
-
-const transMonthly = [
-  {m:"Sep-25",s:328943,fo:73039,cl:33321,u:7077,b:2284,p:3931.69,pr:644},
-  {m:"Oct-25",s:310806,fo:69985,cl:31369,u:6418,b:2259,p:3504.08,pr:552},
-  {m:"Nov-25",s:306841,fo:69278,cl:28815,u:6363,b:2371,p:3390.55,pr:561},
-  {m:"Dec-25",s:357706,fo:96651,cl:29722,u:7448,b:3082,p:2330.22,pr:519},
-  {m:"Jan-26",s:537768,fo:155471,cl:48983,u:12509,b:5199,p:4525.27,pr:709},
-  {m:"Feb-26",s:495667,fo:152167,cl:47334,u:11272,b:2589,p:5918.00,pr:797},
-  {m:"Mar-26",s:540968,fo:147034,cl:47508,u:11037,b:1002,p:6223.04,pr:867},
-  {m:"Apr-26",s:478626,fo:129296,cl:45356,u:10223,b:848,p:5650.27,pr:851},
-  {m:"May-26",s:471974,fo:129195,cl:46281,u:9792,b:988,p:6117.41,pr:1094},
-  {m:"Jun-26",s:496151,fo:141564,cl:51220,u:10858,b:960,p:5965.12,pr:1210},
-  {m:"Jul-26",s:505832,fo:138409,cl:47724,u:10603,b:864,p:5063.49,pr:982},
-];
-
-function derive(d) {
-  return {
-    ...d,
-    or:     d.fo/d.s*100,
-    ctr:    d.cl/d.s*100,
-    unsub:  d.u/d.s*100,
-    bounce: d.b/d.s*100,
-    ppr:    d.p/(d.s/1000),
-    proj:   d.pr/(d.s/1000),
-  };
-}
-
-const mktg = mktgMonthly.map(derive);
-const trans = transMonthly.map(derive);
-
-// ── CAMPAIGN GROUP DATA ──
-const mktgGroups = [
-  {cg:"buyer_bob",          s:318624400,or:9.46, ctr:0.106,unsub:0.053,bounce:0.477,ppr:0.59,  proj:0.132},
-  {cg:"buyer_seasonal",     s:187027000,or:8.59, ctr:0.121,unsub:0.061,bounce:0.338,ppr:0.64,  proj:0.154},
-  {cg:"buyer_mop_up",       s:61833000, or:1.03, ctr:0.057,unsub:0.060,bounce:0.394,ppr:0.44,  proj:0.112},
-  {cg:"buyer_targeted",     s:54181000, or:6.68, ctr:0.234,unsub:0.082,bounce:0.322,ppr:3.20,  proj:0.647},
-  {cg:"buyer_seasonal_polaris",s:14840000,or:7.12,ctr:0.178,unsub:0.122,bounce:0.337,ppr:0.11, proj:0.014},
-  {cg:"buyer_bob_polaris",  s:12564000, or:7.19, ctr:0.137,unsub:0.109,bounce:0.340,ppr:0.44,  proj:0.050},
-  {cg:"buyer_events_based", s:3680000,  or:12.74,ctr:1.699,unsub:0.708,bounce:0.459,ppr:14.52, proj:3.690},
-  {cg:"buyer_project_resubmit",s:2999000,or:23.50,ctr:6.236,unsub:0.486,bounce:0.288,ppr:0.89,proj:0.190},
-  {cg:"survey",             s:2774000,  or:9.70, ctr:0.948,unsub:0.406,bounce:0.592,ppr:0.02,  proj:0.009},
-  {cg:"buyer_bark_review",  s:2282000,  or:15.86,ctr:1.209,unsub:0.000,bounce:0.311,ppr:0.00,  proj:0.000},
-  {cg:"buyer_abandoned_bark",s:1097000, or:36.72,ctr:18.834,unsub:1.484,bounce:0.209,ppr:91.64,proj:29.329},
-  {cg:"polaris_mop_up",     s:943000,   or:3.93, ctr:0.208,unsub:0.121,bounce:0.367,ppr:0.02,  proj:0.001},
-  {cg:"buyer_targeted_polaris",s:771000,or:12.35,ctr:0.552,unsub:0.200,bounce:0.426,ppr:1.79,  proj:0.489},
-  {cg:"buyer_retargeting",  s:484000,   or:18.81,ctr:2.482,unsub:0.816,bounce:0.626,ppr:0.80,  proj:0.153},
-  {cg:"buyer_review_seller",s:387000,   or:16.39,ctr:0.989,unsub:0.346,bounce:0.108,ppr:0.04,  proj:0.005},
-  {cg:"buyer_nurture",      s:33000,    or:8.50, ctr:0.200,unsub:0.277,bounce:0.145,ppr:3.47,  proj:0.303},
-  {cg:"(unlabelled / null)", s:3554000, or:2.85, ctr:0.107,unsub:0.099,bounce:0.387,ppr:0.64,  proj:0.148},
-];
-
-const transGroups = [
-  {cg:"buyer_no_list_view",  s:2101000,or:27.60,ctr:13.965,unsub:2.305,bounce:0.445,ppr:12.43,proj:2.026},
-  {cg:"buyer_welcome",       s:1567000,or:36.31,ctr:7.657, unsub:1.990,bounce:0.839,ppr:9.31, proj:1.033},
-  {cg:"buyer_no_interaction",s:892000, or:26.40,ctr:8.399, unsub:2.276,bounce:0.270,ppr:10.13,proj:2.662},
-];
-
-// ── CHANNEL BENCHMARK AVGS ──
-const mktgAvg = { or:8.23, ctr:0.200, unsub:0.071, bounce:0.412, ppr:1.01, proj:0.240 };
-const transAvg = { or:26.95, ctr:9.472, unsub:2.144, bounce:0.465, ppr:10.89, proj:1.819 };
-
-// ── HEAT CELL LOGIC ──
-function heatMktg(k, v) {
-  if (k==='or')     return v>=10?'cell-g':v<5?'cell-r':'';
-  if (k==='ctr')    return v>=0.5?'cell-g':v<0.10?'cell-r':'';
-  if (k==='unsub')  return v<0.07?'cell-g':v>0.20?'cell-r':v>0.12?'cell-a':'';
-  if (k==='bounce') return v<0.30?'cell-g':v>0.80?'cell-r':v>0.50?'cell-a':'';
-  if (k==='ppr')    return v>=2?'cell-g':v>=1?'cell-b':v<0.10?'cell-r':'';
-  if (k==='proj')   return v>=0.3?'cell-g':v<0.05?'cell-r':'';
-  return '';
-}
-function heatTrans(k, v) {
-  if (k==='or')     return v>=30?'cell-g':v<15?'cell-r':'';
-  if (k==='ctr')    return v>=8?'cell-g':v<4?'cell-r':'';
-  if (k==='unsub')  return v<2?'cell-g':v>3?'cell-r':v>2.5?'cell-a':'';
-  if (k==='bounce') return v<0.40?'cell-g':v>1?'cell-r':'';
-  if (k==='ppr')    return v>=12?'cell-g':v>=8?'cell-b':v<3?'cell-r':'';
-  if (k==='proj')   return v>=2?'cell-g':v<0.5?'cell-r':'';
-  return '';
-}
-
-function fmtSends(s) { return s>=1e6?(s/1e6).toFixed(1)+'M':(s/1000).toFixed(0)+'K'; }
-function buildGroupTable(id, rows, heatFn) {
-  const tb = document.getElementById(id);
-  tb.innerHTML = rows.map(r => `<tr>
-    <td>${r.cg}</td>
-    <td>${fmtSends(r.s)}</td>
-    <td class="${heatFn('or',r.or)}">${r.or.toFixed(2)}%</td>
-    <td class="${heatFn('ctr',r.ctr)}">${r.ctr.toFixed(3)}%</td>
-    <td class="${heatFn('unsub',r.unsub)}">${r.unsub.toFixed(3)}%</td>
-    <td class="${heatFn('bounce',r.bounce)}">${r.bounce.toFixed(3)}%</td>
-    <td class="${heatFn('ppr',r.ppr)}">£${r.ppr.toFixed(2)}</td>
-    <td class="${heatFn('proj',r.proj)}">${r.proj.toFixed(3)}</td>
-  </tr>`).join('');
-}
-buildGroupTable('mktg-table', mktgGroups, heatMktg);
-buildGroupTable('trans-table', transGroups, heatTrans);
-
-// ── MONTHLY TABLES ──
-function buildMonthlyTable(id, data) {
-  const tb = document.getElementById(id);
-  tb.innerHTML = data.map(d => `<tr>
-    <td>${d.m}</td>
-    <td>${fmtSends(d.s)}</td>
-    <td>${d.or.toFixed(2)}%</td>
-    <td>${d.ctr.toFixed(3)}%</td>
-    <td>${d.unsub.toFixed(3)}%</td>
-    <td>${d.bounce.toFixed(3)}%</td>
-    <td>£${d.ppr.toFixed(2)}</td>
-    <td>${d.proj.toFixed(3)}</td>
-  </tr>`).join('');
-}
-buildMonthlyTable('monthly-mktg-table', mktg);
-buildMonthlyTable('monthly-trans-table', trans);
-
-// ── TREND CHART ──
-let currentMetric = 'or';
-const metricLabels = {or:'Open rate',ctr:'CTR',unsub:'Unsub %',bounce:'Bounce %',ppr:'PPR / 1k £',proj:'Projects / 1k'};
-const metricFmt = {or:v=>`${v.toFixed(2)}%`,ctr:v=>`${v.toFixed(3)}%`,unsub:v=>`${v.toFixed(3)}%`,bounce:v=>`${v.toFixed(3)}%`,ppr:v=>`£${v.toFixed(2)}`,proj:v=>v.toFixed(3)};
-
-function selectMetric(m, el) {
-  currentMetric = m;
-  document.querySelectorAll('.metric-pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('chart-title').textContent = metricLabels[m] + ' — monthly';
-  renderTrendChart(m);
-}
-
-function renderTrendChart(m) {
-  const svg = document.getElementById('trend-chart');
-  if (!svg) return;
-  const W = svg.parentElement.clientWidth - 48 || 600;
-  const H = 200;
-  const padL = 12, padR = 12, padT = 28, padB = 24;
-
-  const mVals = mktg.map(d => d[m]);
-  const tVals = trans.map(d => d[m]);
-  const allVals = [...mVals, ...tVals];
-  const minV = Math.min(...allVals) * 0.88;
-  const maxV = Math.max(...allVals) * 1.12;
-  const xStep = (W - padL - padR) / (months.length - 1);
-  const yS = v => padT + (H - padT - padB) * (1 - (v - minV) / (maxV - minV));
-
-  const mPts = mVals.map((v,i) => [padL + i*xStep, yS(v)]);
-  const tPts = tVals.map((v,i) => [padL + i*xStep, yS(v)]);
-  const lp = pts => `M${pts[0][0]},${pts[0][1]} ` + pts.slice(1).map(p=>`L${p[0]},${p[1]}`).join(' ');
-
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.innerHTML = `
-    <defs>
-      <linearGradient id="mGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#1A56A0" stop-opacity="0.08"/>
-        <stop offset="100%" stop-color="#1A56A0" stop-opacity="0"/>
-      </linearGradient>
-      <linearGradient id="tGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#0D7A5F" stop-opacity="0.10"/>
-        <stop offset="100%" stop-color="#0D7A5F" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <path d="${lp(mPts)} L${mPts[mPts.length-1][0]},${H-padB} L${mPts[0][0]},${H-padB} Z" fill="url(#mGrad)"/>
-    <path d="${lp(tPts)} L${tPts[tPts.length-1][0]},${H-padB} L${tPts[0][0]},${H-padB} Z" fill="url(#tGrad)"/>
-    <path d="${lp(mPts)}" fill="none" stroke="#1A56A0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-    <path d="${lp(tPts)}" fill="none" stroke="#0D7A5F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="5 3"/>
-    ${mPts.map((p,i) => `
-      <circle cx="${p[0]}" cy="${p[1]}" r="3" fill="white" stroke="#1A56A0" stroke-width="1.5"/>
-      <text x="${p[0]}" y="${p[1]-8}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#1A56A0">${metricFmt[m](mVals[i])}</text>
-      <text x="${p[0]}" y="${H-6}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#B0B3BF">${months[i]}</text>
-    `).join('')}
-    ${tPts.map((p,i) => `
-      <circle cx="${p[0]}" cy="${p[1]}" r="3" fill="white" stroke="#0D7A5F" stroke-width="1.5"/>
-      <text x="${p[0]}" y="${p[1]+16}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#0D7A5F">${metricFmt[m](tVals[i])}</text>
-    `).join('')}
-  `;
-}
-renderTrendChart('or');
+// ── INIT ──
+renderChannelCards('Q3-26');
+renderEmailChart();
 </script>
 </body>
 </html>

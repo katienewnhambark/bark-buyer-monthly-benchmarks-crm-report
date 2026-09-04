@@ -95,9 +95,9 @@ tbody td:first-child{text-align:left;font-family:var(--sans);color:var(--ink);fo
   <div class="header-left">
     <div style="font-size:11px;color:#475569;margin-bottom:6px;font-family:var(--mono)">Bark · CRM</div>
     <h1>Buyer Comms Monthly Benchmarks</h1>
-    <div class="sub">Sep 2025 – Jul 2026 · 11 months · Email · Push · SMS</div>
+    <div class="sub">Oct 2025 – Aug 2026 · 11 months · Email · Push · SMS</div>
   </div>
-  <div class="header-right">Generated Wed 13 Aug 2026<br>Excl. partial month (Aug 2026)</div>
+  <div class="header-right">Generated Fri 4 Sep 2026<br>Excl. partial month (Sep 2026)</div>
 </div>
 
 <div class="tabs">
@@ -112,13 +112,13 @@ tbody td:first-child{text-align:left;font-family:var(--sans);color:var(--ink);fo
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
     <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3)">Quarterly weighted averages · select quarter to view</div>
     <div class="qtr-bar" id="qtr-bar">
-      <div class="qtr-btn active" onclick="setQtr('Q3-26',this)">Q3 2026 <span style="font-size:9px;opacity:.7">(Jul only)</span></div>
+      <div class="qtr-btn active" onclick="setQtr('Q3-26',this)">Q3 2026 <span style="font-size:9px;opacity:.7">(Sep omitted)</span></div>
       <div class="qtr-btn" onclick="setQtr('Q2-26',this)">Q2 2026</div>
       <div class="qtr-btn" onclick="setQtr('Q1-26',this)">Q1 2026</div>
       <div class="qtr-btn" onclick="setQtr('Q4-25',this)">Q4 2025</div>
     </div>
   </div>
-  <div class="qtr-note" id="qtr-note">Q3 2026: May · Jun · Jul 2026 — 3 complete months</div>
+  <div class="qtr-note" id="qtr-note">Q3 2026: Jul · Aug 2026 — 2 complete months (Sep not yet complete)</div>
 
   <div class="section-label" id="email-section-label">Email channels — Q3 2026 weighted average</div>
   <div class="channel-grid" id="email-cards"></div>
@@ -131,12 +131,19 @@ tbody td:first-child{text-align:left;font-family:var(--sans);color:var(--ink);fo
 
   <div class="info">📊 <strong>Reading these numbers:</strong> Push open rates are low vs email — 0.9% on a high-volume channel is normal because push requires an active device unlock. SMS CTR (24–35%) is not comparable to email CTR; it measures link taps on delivered messages, a much higher-intent action. PPR/1k is comparable across all channels using the same 7-day post-send attribution window. Δ vs prior quarter shown where available.</div>
 
+  <div class="section-label">Polaris buyer conversion — Email - Buyer channel · AU only</div>
+  <div class="channel-grid">
+    <div class="ch-card" id="trading-card" style="border-left:3px solid #D97706;min-width:220px"></div>
+    <div class="ch-card" id="trading-msg-mkt" style="border-left:3px solid #5b34b5;min-width:220px"></div>
+    <div class="ch-card" id="trading-msg-txn" style="border-left:3px solid #64748b;min-width:220px"></div>
+  </div>
+
 </div>
 
 <!-- ═══ BY CAMPAIGN GROUP ═══ -->
 <div class="page" id="tab-group">
 
-  <div class="info">Rolling averages computed from weighted totals across the window. <strong>3-month avg</strong> = May–Jul 2026. <strong>6-month avg</strong> = Feb–Jul 2026. All rates computed from raw totals — not averaged.</div>
+  <div class="info">Rolling averages computed from weighted totals across the window. <strong>3-month avg</strong> = Jun–Aug 2026. <strong>6-month avg</strong> = Mar–Aug 2026. All rates computed from raw totals — not averaged.</div>
 
   <div class="section-label">Email — Customer Marketing Channel · rolling averages</div>
   <div class="card">
@@ -170,8 +177,34 @@ tbody td:first-child{text-align:left;font-family:var(--sans);color:var(--ink);fo
     </table></div>
   </div>
 
-  <div class="section-label">Push — campaign groups · rolling averages · open rate only</div>
-  <div class="card">
+  <div class="section-label">Polaris buyer conversion — Trading Data (Polaris) · Email - Buyer · AU only</div>
+  <div class="card" style="border-left:3px solid #D97706">
+    <div class="card-head">% Sessions w/ Enquiry <span>3-month avg (Jun–Aug 2026) vs 6-month avg (Mar–Aug 2026) · sessions where a buyer submitted an enquiry to a seller</span></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th class="tl">Metric</th><th>3mo (Jun–Aug)</th><th>6mo (Mar–Aug)</th><th>11mo avg (Oct-25–Aug-26)</th></tr></thead>
+      <tbody>
+        <tr><td class="tl">Sessions (AU)</td><td>9,960</td><td>19,309</td><td>43,617</td></tr>
+        <tr><td class="tl">Sessions w/ enquiry</td><td>227</td><td>419</td><td>1,134</td></tr>
+        <tr><td class="tl">Total enquiries</td><td>554</td><td>954</td><td>2,756</td></tr>
+        <tr><td class="tl" style="font-weight:600;color:#92400E">% Sessions w/ Enquiry</td><td style="font-weight:600;color:#92400E">2.28%</td><td style="font-weight:600;color:#92400E">2.17%</td><td style="font-weight:600;color:#92400E">2.74%</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:10px;color:var(--ink3);margin-top:10px;font-family:var(--mono)">🗂️ Trading Data (Polaris) · Marketing Channel = Email - Buyer · Country = Australia · ⚠️ From 6 Oct 2026: also add IE and GB to country filter</p>
+  </div>
+
+  <div class="card" style="border-left:3px solid #5b34b5">
+    <div class="card-head">Consumer messages / session <span>Per-channel · Polaris Email Stats · proxy for enquiry conversion used by CRM dashboard</span></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th class="tl">Channel</th><th>3mo msgs/session</th><th>6mo msgs/session</th><th>11mo msgs/session</th><th>3mo msgs/1k sends</th><th>6mo msgs/1k sends</th></tr></thead>
+      <tbody>
+        <tr><td class="tl">Customer Marketing</td><td>1.51</td><td>1.54</td><td>1.60</td><td>0.922</td><td>0.798</td></tr>
+        <tr><td class="tl">Customer Transactional</td><td>2.22</td><td>1.83</td><td>1.91</td><td>401.39</td><td>246.94</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:10px;color:var(--ink3);margin-top:10px;font-family:var(--mono)">🗂️ Polaris Email Stats (LUID: 755aa81b) · consumer_message_count ÷ consumer_session_count · per channel · all markets</p>
+  </div>
+
+  <div class="section-label">Push — campaign groups · rolling averages · open rate only</div>  <div class="card">
     <div class="card-head">Push groups <span>Heat-coded per push thresholds · rolling averages</span></div>
     <div style="overflow-x:auto"><table>
       <thead><tr><th>Campaign group</th><th>Channel</th><th>3mo sends</th><th>OR (3mo)</th><th>OR (6mo)</th><th>PPR/1k (3mo)</th><th>PPR/1k (6mo)</th><th>Proj/1k (3mo)</th><th>Proj/1k (6mo)</th></tr></thead>
@@ -204,7 +237,7 @@ tbody td:first-child{text-align:left;font-family:var(--sans);color:var(--ink);fo
 <!-- ═══ TRENDS (COMBINED) ═══ -->
 <div class="page" id="tab-trends">
 
-  <div class="section-label">Email monthly trends — Jul 2025 to Jul 2026</div>
+  <div class="section-label">Email monthly trends — Oct 2025 to Aug 2026</div>
   <div class="chart-wrap">
     <div class="chart-title">
       Customer Marketing &amp; Transactional channels
@@ -222,13 +255,17 @@ tbody td:first-child{text-align:left;font-family:var(--sans);color:var(--ink);fo
       <div class="chip" onclick="setEmailMetric('bounce',this)">Bounce%</div>
       <div class="chip" onclick="setEmailMetric('ppr',this)">PPR/1k</div>
       <div class="chip" onclick="setEmailMetric('proj',this)">Proj/1k</div>
+      <div class="chip" onclick="setEmailMetric('sess1k',this)">Sessions/1k <span style="font-size:9px;opacity:0.7">Polaris</span></div>
+      <div class="chip" onclick="setEmailMetric('msg1k',this)">Messages/1k <span style="font-size:9px;opacity:0.7">Polaris</span></div>
+      <div class="chip" onclick="setEmailMetric('mps',this)">Msgs/session <span style="font-size:9px;opacity:0.7">Polaris</span></div>
+      <div class="chip" onclick="setEmailMetric('pctSessEnq',this)">% Sessions w/ Enquiry <span style="font-size:9px;opacity:0.7">Trading</span></div>
     </div>
     <svg id="email-chart" width="100%" height="220" style="overflow:visible"></svg>
   </div>
 
   <hr class="divider">
 
-  <div class="section-label">Push &amp; SMS monthly trends — Jul 2025 to Jul 2026</div>
+  <div class="section-label">Push &amp; SMS monthly trends — Oct 2025 to Aug 2026</div>
 
   <div class="chart-wrap">
     <div class="chart-title">
@@ -253,79 +290,30 @@ tbody td:first-child{text-align:left;font-family:var(--sans);color:var(--ink);fo
 </div>
 
 <script>
-const MONTHS = ["Jul-25","Aug-25","Sep-25","Oct-25","Nov-25","Dec-25","Jan-26","Feb-26","Mar-26","Apr-26","May-26","Jun-26","Jul-26"];
 
-// Quarter definitions — indices into MONTHS array (Jul-25 to Jul-26, 13 months)
-// MONTHS: [0]Jul-25 [1]Aug-25 [2]Sep-25 [3]Oct-25 [4]Nov-25 [5]Dec-25 [6]Jan-26 [7]Feb-26 [8]Mar-26 [9]Apr-26 [10]May-26 [11]Jun-26 [12]Jul-26
-// Q3-25 = Jul/Aug/Sep-25 (0,1,2) | Q4-25 = Oct/Nov/Dec-25 (3,4,5) | Q1-26 = Jan/Feb/Mar-26 (6,7,8) | Q2-26 = Apr/May/Jun-26 (9,10,11) | Q3-26 = Jul-26 only (12)
-const QTRS = {
-  'Q3-26': {label:'Q3 2026', note:'Q3 2026: Jul 2026 only — Aug/Sep not yet complete', months:['Jul-26'], idx:[12]},
-  'Q2-26': {label:'Q2 2026', note:'Q2 2026: Apr · May · Jun 2026 — 3 complete months', months:['Apr-26','May-26','Jun-26'], idx:[9,10,11]},
-  'Q1-26': {label:'Q1 2026', note:'Q1 2026: Jan · Feb · Mar 2026 — 3 complete months', months:['Jan-26','Feb-26','Mar-26'], idx:[6,7,8]},
-  'Q4-25': {label:'Q4 2025', note:'Q4 2025: Oct · Nov · Dec 2025 — 3 complete months', months:['Oct-25','Nov-25','Dec-25'], idx:[3,4,5]}
-};
+const MONTHS = ["Oct-25", "Nov-25", "Dec-25", "Jan-26", "Feb-26", "Mar-26", "Apr-26", "May-26", "Jun-26", "Jul-26", "Aug-26"];
+const EMAIL = {"Customer Marketing Channel": {"color": "#5b34b5", "sends": [61196136, 53910305, 62824547, 59724721, 50893711, 56102261, 53274697, 64432210, 71195997, 76453771, 59822802], "or": [10.07, 9.99, 9.6, 9.97, 9.79, 7.31, 7.22, 6.28, 5.78, 5.96, 4.77], "ctr": [0.251, 0.231, 0.13, 0.176, 0.205, 0.22, 0.221, 0.204, 0.168, 0.172, 0.194], "unsub": [0.076, 0.075, 0.066, 0.08, 0.074, 0.069, 0.069, 0.069, 0.064, 0.065, 0.077], "bounce": [0.647, 0.555, 0.443, 0.388, 0.411, 0.402, 0.335, 0.406, 0.311, 0.285, 0.279], "ppr": [1.15, 1.14, 0.73, 1.02, 1.14, 1.1, 1.07, 0.93, 0.86, 0.77, 0.77], "proj": [0.273, 0.246, 0.189, 0.245, 0.247, 0.251, 0.254, 0.23, 0.212, 0.195, 0.2], "sess1k": [0.803, 0.809, 0.416, 0.436, 0.374, 0.362, 0.464, 0.479, 0.671, 0.658, 0.49], "msg1k": [1.123, 1.273, 0.916, 0.767, 0.627, 0.615, 0.746, 0.744, 1.234, 0.815, 0.707], "mps": [1.4, 1.57, 2.2, 1.76, 1.68, 1.7, 1.61, 1.55, 1.84, 1.24, 1.44]}, "Customer Transactional Channel": {"color": "#64748b", "sends": [310806, 306841, 357706, 537768, 495667, 540968, 478626, 471974, 496151, 505832, 442628], "or": [22.52, 22.58, 27.02, 28.91, 30.7, 27.18, 27.01, 27.37, 28.53, 27.54, 23.79], "ctr": [10.093, 9.391, 8.309, 9.109, 9.55, 8.782, 9.476, 9.806, 10.323, 9.483, 8.886], "unsub": [2.065, 2.074, 2.082, 2.326, 2.274, 2.04, 2.136, 2.075, 2.188, 2.111, 2.182], "bounce": [0.727, 0.773, 0.862, 0.967, 0.522, 0.185, 0.177, 0.209, 0.193, 0.172, 0.201], "ppr": [11.27, 11.05, 6.51, 8.41, 11.94, 11.5, 11.81, 12.96, 12.02, 10.4, 11.84], "proj": [1.776, 1.828, 1.451, 1.318, 1.608, 1.603, 1.778, 2.318, 2.439, 1.991, 2.144], "sess1k": [181.948, 184.651, 85.336, 47.287, 35.331, 44.951, 105.468, 243.811, 270.935, 192.584, 103.127], "msg1k": [316.892, 369.062, 209.457, 75.415, 53.869, 65.224, 248.012, 363.996, 417.024, 439.83, 293.309], "mps": [1.74, 2.0, 2.45, 1.59, 1.52, 1.45, 2.35, 1.49, 1.54, 2.28, 2.84]}};
+const PUSH = {"Push Marketing": {"color": "#0891b2", "sends": [390522, 376332, 390162, 384840, 322878, 257670, 255621, 279978, 305295, 596958, 303789], "or": [0.43, 0.61, 0.36, 0.42, 0.8, 1.45, 1.59, 1.69, 1.78, 1.09, 1.45], "ctr": [null, null, null, null, null, null, null, null, null, null, null], "unsub": [null, null, null, null, null, null, null, null, null, null, null], "bounce": [null, null, null, null, null, null, null, null, null, null, null], "ppr": [126.13, 117.47, 67.18, 116.74, 171.99, 237.2, 226.25, 222.78, 215.23, 123.68, 159.41], "proj": [11.68, 12.37, 9.22, 13.05, 19.61, 33.09, 33.38, 38.69, 36.13, 20.18, 27.81]}, "Push Transactional": {"color": "#0e7490", "sends": [52593, 49371, 46557, 40689, 30534, 26658, 30099, 37980, 37353, 38193, 32055], "or": [13.96, 12.17, 11.68, 12.36, 11.68, 11.04, 12.86, 14.04, 15.66, 16.09, 17.24], "ctr": [null, null, null, null, null, null, null, null, null, null, null], "unsub": [null, null, null, null, null, null, null, null, null, null, null], "bounce": [null, null, null, null, null, null, null, null, null, null, null], "ppr": [21.64, 1.38, 6.56, 4.49, 1.5, 4.87, 24.62, 28.29, 40.33, 27.36, 9.24], "proj": [2.0, 0.67, 0.64, 1.03, 1.67, 1.35, 3.59, 1.26, 3.13, 2.98, 1.97]}, "SMS Marketing": {"color": "#059669", "sends": [739119, 460995, 518298, 2872452, 743481, 584118, 555396, 549780, 568914, 826632, 472875], "or": [null, null, null, null, null, null, null, null, null, null, null], "ctr": [null, 17.94, 34.01, 26.69, 31.77, 34.75, 34.67, 34.95, 34.87, 27.64, 31.13], "unsub": [null, null, null, null, null, null, null, null, null, null, null], "bounce": [4.44, 4.21, 4.53, 8.11, 5.13, 4.19, 4.05, 4.01, 3.75, 2.52, 3.04], "ppr": [370.88, 385.67, 347.49, 137.56, 291.81, 386.22, 362.44, 477.33, 438.0, 318.37, 431.26], "proj": [54.38, 56.75, 64.15, 20.11, 39.03, 50.85, 56.59, 84.34, 81.44, 57.05, 74.79]}};
+const QTRS = {"Q3-26": {"label": "Q3 2026", "note": "Q3 2026: Jul - Aug 2026 \u2014 2 complete months (Sep not yet complete)", "months": ["Jul-26", "Aug-26"], "idx": [9, 10]}, "Q2-26": {"label": "Q2 2026", "note": "Q2 2026: Apr - May - Jun 2026 \u2014 3 complete months", "months": ["Apr-26", "May-26", "Jun-26"], "idx": [6, 7, 8]}, "Q1-26": {"label": "Q1 2026", "note": "Q1 2026: Jan - Feb - Mar 2026 \u2014 3 complete months", "months": ["Jan-26", "Feb-26", "Mar-26"], "idx": [3, 4, 5]}, "Q4-25": {"label": "Q4 2025", "note": "Q4 2025: Oct - Nov - Dec 2025 \u2014 3 complete months", "months": ["Oct-25", "Nov-25", "Dec-25"], "idx": [0, 1, 2]}};
 let currentQtr = 'Q3-26';
 
-// Jul-25 to Jul-26 = 13 months
-// idx: [0]Jul-25 [1]Aug-25 [2]Sep-25 [3]Oct-25 [4]Nov-25 [5]Dec-25 [6]Jan-26 [7]Feb-26 [8]Mar-26 [9]Apr-26 [10]May-26 [11]Jun-26 [12]Jul-26
-const EMAIL = {
-  "Customer Marketing Channel": {
-    color:'#5b34b5',
-    sends:[3641209,3578234,3521925,3428451,3284019,2916108,3876543,3428451,3564789,3621054,3734619,3848184,3961749],
-    or:[8.21,8.22,8.23,8.24,8.24,8.24,8.24,8.24,8.24,8.24,8.24,8.24,8.24],
-    ctr:[0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20],
-    unsub:[0.072,0.071,0.071,0.071,0.071,0.071,0.071,0.071,0.071,0.071,0.071,0.071,0.071],
-    bounce:[0.51,0.49,0.49,0.46,0.45,0.46,0.46,0.46,0.46,0.46,0.46,0.46,0.46],
-    ppr:[78.41,79.31,80.21,77.37,74.22,68.72,87.32,87.06,86.97,87.50,88.17,88.70,89.28],
-    proj:[7.98,8.05,8.12,7.59,7.57,7.00,8.91,8.89,8.88,8.92,9.00,9.06,9.12]
-  },
-  "Customer Transactional Channel": {
-    color:'#64748b',
-    sends:[461203,467041,472977,510381,491967,429957,570243,504243,523251,530397,547899,565401,582903],
-    or:[26.92,26.94,26.95,26.85,26.74,26.85,26.81,26.80,26.80,26.80,26.79,26.82,26.80],
-    ctr:[9.44,9.46,9.47,9.36,9.41,9.40,9.40,9.39,9.40,9.40,9.41,9.40,9.40],
-    unsub:[2.15,2.14,2.14,2.12,2.13,2.13,2.13,2.13,2.13,2.12,2.13,2.12,2.12],
-    bounce:[0.49,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48],
-    ppr:[224.18,225.34,226.52,229.33,228.41,213.02,229.79,229.62,229.78,231.18,230.87,231.08,230.99],
-    proj:[25.81,25.93,26.05,26.39,26.25,24.49,26.42,26.41,26.41,26.58,26.54,26.55,26.53]
-  }
+// Trading Data (Polaris) — Email - Buyer, AU only, Oct-25 to Aug-26
+// % Sessions w/ Enquiry = project_count / session_count
+// Note: from 6 Oct 2026 onwards, also filter by IE and GB (not just AU)
+const TRADING = {
+  sessions:    [6430, 3950, 3106, 3824, 4056, 3152, 2911, 6224, 4003, 3364, 2593],
+  enquiries:   [633,  474,  302,  235,  142,  213,  166,  251,  205,  191,  144],
+  projects:    [282,  197,  106,  78,   61,   80,   71,   95,   83,   80,   61],
+  pctSessEnq:  [4.39, 4.99, 3.41, 2.04, 1.50, 2.54, 2.44, 1.53, 2.07, 2.38, 2.35]
 };
+function tradingQtrStats(idx) {
+  const s = idx.reduce((a,i)=>a+TRADING.sessions[i],0);
+  const p = idx.reduce((a,i)=>a+TRADING.projects[i],0);
+  const e = idx.reduce((a,i)=>a+TRADING.enquiries[i],0);
+  return { sessions:s, projects:p, enquiries:e, pct: s>0 ? (p/s*100).toFixed(2) : null };
+}
 
-// Push/SMS data Jul-25 to Jul-26 (13 months)
-// For Push: or = open rate (engagement metric); ctr/unsub = null (not tracked)
-// For SMS: ctr = CTR (engagement metric); or/unsub = null (not tracked); bounce tracked
-const PUSH = {
-  "Push Marketing": {
-    key:'push-mkt', color:'#0891b2',
-    sends:[491203,483419,475725,390522,376332,390162,384840,322878,257670,255621,279978,305295,596958],
-    or:[0.44,0.46,0.48,0.43,0.61,0.36,0.42,0.80,1.45,1.59,1.69,1.78,1.09],
-    ctr:[null,null,null,null,null,null,null,null,null,null,null,null,null],
-    unsub:[null,null,null,null,null,null,null,null,null,null,null,null,null],
-    bounce:[null,null,null,null,null,null,null,null,null,null,null,null,null],
-    ppr:[108.21,110.47,112.74,126.13,117.47,67.18,116.74,171.99,237.20,226.25,222.78,215.23,123.68],
-    proj:[10.84,11.27,11.71,11.68,12.37,9.22,13.05,19.61,33.09,33.38,38.69,36.13,20.18]
-  },
-  "Push Transactional": {
-    key:'push-txn', color:'#0e7490',
-    sends:[15203,16081,16950,52593,49371,46557,40689,30534,26658,30099,37980,37353,38193],
-    or:[15.91,16.37,16.83,13.96,12.17,11.68,12.36,11.68,11.04,12.86,14.03,15.66,16.10],
-    ctr:[null,null,null,null,null,null,null,null,null,null,null,null,null],
-    unsub:[null,null,null,null,null,null,null,null,null,null,null,null,null],
-    bounce:[null,null,null,null,null,null,null,null,null,null,null,null,null],
-    ppr:[1.84,2.02,2.21,21.64,1.38,6.56,4.49,1.50,4.87,24.62,28.29,40.33,27.36],
-    proj:[0.59,0.65,0.71,2.00,0.67,0.64,1.03,1.67,1.35,3.59,1.26,3.13,2.98]
-  },
-  "SMS Marketing": {
-    key:'sms-mkt', color:'#059669',
-    sends:[801234,789412,777693,739119,460995,518298,2872452,743481,584118,555396,549780,568914,826632],
-    or:[null,null,null,null,null,null,null,null,null,null,null,null,null],
-    ctr:[null,null,null,null,null,null,null,17.94,34.75,34.67,34.95,34.85,27.62],
-    unsub:[null,null,null,null,null,null,null,null,null,null,null,null,null],
-    bounce:[4.48,4.46,4.45,4.44,4.21,4.53,8.11,5.13,4.19,4.05,4.01,3.75,2.52],
-    ppr:[362.14,360.52,358.91,370.88,385.67,347.49,137.56,291.81,386.22,362.44,477.33,438.00,318.34],
-    proj:[57.84,57.18,56.53,54.38,56.75,64.15,20.10,39.03,50.85,56.57,84.34,81.44,57.06]
-  }
-};
+
 
 // ── WEIGHTED AVG FOR A SET OF MONTH INDICES ──
 function wAvg(data, idxArr, metric) {
@@ -385,17 +373,26 @@ function renderChannelCards(qKey) {
     const isMkt = name.includes('Marketing');
     const cls = isMkt ? 'email-mkt' : 'email-txn';
     const badge = isMkt ? 'Marketing' : 'Transactional';
-    let prevOr=null, prevPpr=null;
-    if (prevQ) { prevOr=wAvg(d,prevQ.idx,'or'); prevPpr=wAvg(d,prevQ.idx,'ppr'); }
+    let prevOr=null, prevCtr=null, prevUnsub=null, prevBounce=null, prevPpr=null, prevProj=null, prevSess1k=null, prevMps=null, prevMsg1k=null;
+    if (prevQ) {
+      prevOr=wAvg(d,prevQ.idx,'or'); prevCtr=wAvg(d,prevQ.idx,'ctr');
+      prevUnsub=wAvg(d,prevQ.idx,'unsub'); prevBounce=wAvg(d,prevQ.idx,'bounce');
+      prevPpr=wAvg(d,prevQ.idx,'ppr'); prevProj=wAvg(d,prevQ.idx,'proj');
+      prevSess1k=wAvg(d,prevQ.idx,'sess1k'); prevMps=wAvg(d,prevQ.idx,'mps');
+      prevMsg1k=wAvg(d,prevQ.idx,'msg1k');
+    }
     return `<div class="ch-card ${cls}">
       <div class="ch-card-label"><span class="badge email-badge">Email</span> ${badge}</div>
       <div class="ch-card-name">${name}</div>
       <div class="metric-row"><span class="metric-label">Open rate (filtered)</span><span class="metric-val">${fmt(or,'pct1')} ${delta(or,prevOr)}</span></div>
-      <div class="metric-row"><span class="metric-label">CTR</span><span class="metric-val">${fmt(ctr,'pct2')} ${delta(ctr,prevQ?wAvg(d,prevQ.idx,'ctr'):null)}</span></div>
-      <div class="metric-row"><span class="metric-label">Unsub rate</span><span class="metric-val">${fmt(unsub,'pct3')}</span></div>
-      <div class="metric-row"><span class="metric-label">Bounce rate</span><span class="metric-val">${fmt(bounce,'pct2')}</span></div>
+      <div class="metric-row"><span class="metric-label">CTR</span><span class="metric-val">${fmt(ctr,'pct2')} ${delta(ctr,prevCtr)}</span></div>
+      <div class="metric-row"><span class="metric-label">Unsub rate</span><span class="metric-val">${fmt(unsub,'pct3')} ${delta(unsub,prevUnsub,false)}</span></div>
+      <div class="metric-row"><span class="metric-label">Bounce rate</span><span class="metric-val">${fmt(bounce,'pct2')} ${delta(bounce,prevBounce,false)}</span></div>
       <div class="metric-row"><span class="metric-label">PPR / 1k sends</span><span class="metric-val">${fmt(ppr,'gbp')} ${delta(ppr,prevPpr)}</span></div>
-      <div class="metric-row"><span class="metric-label">Projects / 1k</span><span class="metric-val">${fmt(proj,'num2')}</span></div>
+      <div class="metric-row"><span class="metric-label">Projects / 1k</span><span class="metric-val">${fmt(proj,'num2')} ${delta(proj,prevProj)}</span></div>
+      <div class="metric-row"><span class="metric-label">Consumer sessions / 1k <span style="font-size:9px;opacity:0.65">Polaris</span></span><span class="metric-val">${fmt(wAvg(d,idx,'sess1k'),'num2')} ${delta(wAvg(d,idx,'sess1k'),prevSess1k)}</span></div>
+      <div class="metric-row"><span class="metric-label">Consumer msgs / session <span style="font-size:9px;opacity:0.65">Polaris</span></span><span class="metric-val">${fmt(wAvg(d,idx,'mps'),'num2')} ${delta(wAvg(d,idx,'mps'),prevMps)}</span></div>
+      <div class="metric-row"><span class="metric-label">Consumer msgs / 1k <span style="font-size:9px;opacity:0.65">Polaris</span></span><span class="metric-val">${fmt(wAvg(d,idx,'msg1k'),'num2')} ${delta(wAvg(d,idx,'msg1k'),prevMsg1k)}</span></div>
       <div class="sends-note">${fmt(totalSends,'sends')} sends · ${q.months.join(' · ')}</div>
     </div>`;
   }).join('');
@@ -419,7 +416,7 @@ function renderChannelCards(qKey) {
       <div class="ch-card-name">Customer ${name} Channel</div>
       <div class="metric-row"><span class="metric-label">Open rate</span><span class="metric-val">${fmt(or,'pct2')} ${delta(or,prevOr)}</span></div>
       <div class="metric-row"><span class="metric-label">PPR / 1k sends</span><span class="metric-val">${fmt(ppr,'gbp')} ${delta(ppr,prevPpr)}</span></div>
-      <div class="metric-row"><span class="metric-label">Projects / 1k</span><span class="metric-val">${fmt(proj,'num2')}</span></div>
+      <div class="metric-row"><span class="metric-label">Projects / 1k</span><span class="metric-val">${fmt(proj,'num2')} ${delta(proj,prevQ?wAvg(d,prevQ.idx,'proj'):null)}</span></div>
       <div class="sends-note">${fmt(totalSends,'sends')} sends · ${q.months.join(' · ')}</div>
     </div>`;
   }).join('');
@@ -440,9 +437,9 @@ function renderChannelCards(qKey) {
     <div class="ch-card-label"><span class="badge sms-badge">SMS</span> Marketing</div>
     <div class="ch-card-name">Customer SMS Marketing Channel</div>
     <div class="metric-row"><span class="metric-label">CTR (link clicks)</span><span class="metric-val">${fmt(ctr,'pct1')} ${delta(ctr,prevCtr)}</span></div>
-    <div class="metric-row"><span class="metric-label">Bounce rate</span><span class="metric-val">${fmt(bounce,'pct2')}</span></div>
+    <div class="metric-row"><span class="metric-label">Bounce rate</span><span class="metric-val">${fmt(bounce,'pct2')} ${delta(bounce,prevQ?wAvg(sd,prevQ.idx,'bounce'):null,false)}</span></div>
     <div class="metric-row"><span class="metric-label">PPR / 1k sends</span><span class="metric-val">${fmt(ppr,'gbp')} ${delta(ppr,prevPpr)}</span></div>
-    <div class="metric-row"><span class="metric-label">Projects / 1k</span><span class="metric-val">${fmt(proj,'num2')}</span></div>
+    <div class="metric-row"><span class="metric-label">Projects / 1k</span><span class="metric-val">${fmt(proj,'num2')} ${delta(proj,prevQ?wAvg(sd,prevQ.idx,'proj'):null)}</span></div>
     <div class="sends-note">${fmt(totalSends,'sends')} sends · ${q.months.join(' · ')}</div>
   </div>
   <div class="ch-card wa-soon">
@@ -450,8 +447,44 @@ function renderChannelCards(qKey) {
     <div class="ch-card-name" style="color:var(--ink3)">Customer WhatsApp — coming soon</div>
     <div class="soon-overlay">No Customer WhatsApp channel yet.<br>Will be added here once Insights add this to the Tableau dashboard.</div>
   </div>`;
-}
+  // Polaris Trading Data — % Sessions w/ Enquiry
+  const tradingEl = document.getElementById('trading-card');
+  if (tradingEl) {
+    const ts = tradingQtrStats(q.idx);
+    const prevTs = prevQ ? tradingQtrStats(prevQ.idx) : null;
+    const prevPct = prevTs ? parseFloat(prevTs.pct) : null;
+    const currPct = parseFloat(ts.pct);
+    tradingEl.innerHTML = `
+      <div class="ch-card-label" style="color:#b45309"><span class="badge" style="background:#FEF3C7;color:#92400E">Polaris Trading</span> Email - Buyer · AU only</div>
+      <div class="ch-card-name" style="color:var(--ink)">% Sessions w/ Enquiry</div>
+      <div class="metric-row"><span class="metric-label">% Sessions w/ enquiry</span><span class="metric-val" style="font-size:16px;font-weight:600;color:#92400E">${ts.pct}% ${delta(currPct,prevPct)}</span></div>
+      <div class="metric-row"><span class="metric-label">Sessions</span><span class="metric-val">${ts.sessions.toLocaleString()}</span></div>
+      <div class="metric-row"><span class="metric-label">Sessions w/ enquiry</span><span class="metric-val">${ts.projects.toLocaleString()}</span></div>
+      <div class="metric-row"><span class="metric-label">Total enquiries</span><span class="metric-val">${ts.enquiries.toLocaleString()}</span></div>
+      <div class="sends-note">🗂️ Trading Data (Polaris) · ${q.months.join(' · ')} · From 6 Oct 2026 add IE &amp; GB</div>
+    `;
+  }
 
+  // Polaris Email Stats — Consumer messages/session per channel
+  ['mkt','txn'].forEach(t => {
+    const el = document.getElementById('trading-msg-'+t);
+    if (!el) return;
+    const chName = t==='mkt' ? 'Customer Marketing Channel' : 'Customer Transactional Channel';
+    const d = EMAIL[chName];
+    const mps = wAvg(d, q.idx, 'mps');
+    const msg1k = wAvg(d, q.idx, 'msg1k');
+    const prevMps = prevQ ? wAvg(d, prevQ.idx, 'mps') : null;
+    const badge = t==='mkt' ? 'Marketing' : 'Transactional';
+    const col = t==='mkt' ? '#5b34b5' : '#64748b';
+    el.innerHTML = `
+      <div class="ch-card-label"><span class="badge" style="background:#ede9f8;color:${col}">Polaris Email Stats</span> ${badge}</div>
+      <div class="ch-card-name" style="color:var(--ink)">Consumer msgs / session</div>
+      <div class="metric-row"><span class="metric-label">Msgs / session</span><span class="metric-val" style="font-size:16px;font-weight:600;color:${col}">${fmt(mps,'num2')} ${delta(mps,prevMps)}</span></div>
+      <div class="metric-row"><span class="metric-label">Msgs / 1k sends</span><span class="metric-val">${fmt(msg1k,'num2')}</span></div>
+      <div class="sends-note">🗂️ Polaris Email Stats · consumer_message_count · ${q.months.join(' · ')}</div>
+    `;
+  });
+}
 function setQtr(key, el) {
   currentQtr = key;
   document.querySelectorAll('.qtr-btn').forEach(b=>b.classList.remove('active'));
@@ -587,8 +620,12 @@ function setEmailMetric(m,el){
 }
 function renderEmailChart(){
   const el=document.getElementById('email-chart');
-  const fmts={sends:v=>(v/1e6).toFixed(1)+'M',or:v=>v.toFixed(1)+'%',ctr:v=>v.toFixed(2)+'%',unsub:v=>v.toFixed(3)+'%',bounce:v=>v.toFixed(2)+'%',ppr:v=>'£'+v.toFixed(0),proj:v=>v.toFixed(2)};
-  svgLine(el,Object.values(EMAIL).map(d=>d[emailMetric]),MONTHS,Object.values(EMAIL).map(d=>d.color),fmts[emailMetric]||(v=>v));
+  const fmts={sends:v=>(v/1e6).toFixed(1)+'M',or:v=>v.toFixed(1)+'%',ctr:v=>v.toFixed(2)+'%',unsub:v=>v.toFixed(3)+'%',bounce:v=>v.toFixed(2)+'%',ppr:v=>'£'+v.toFixed(0),proj:v=>v.toFixed(2),sess1k:v=>v.toFixed(2),msg1k:v=>v.toFixed(2),mps:v=>v.toFixed(2),pctSessEnq:v=>v.toFixed(2)+'%'};
+  if(emailMetric==='pctSessEnq'){
+    svgLine(el,[TRADING.pctSessEnq],MONTHS,['#D97706'],fmts.pctSessEnq);
+  } else {
+    svgLine(el,Object.values(EMAIL).map(d=>d[emailMetric]),MONTHS,Object.values(EMAIL).map(d=>d.color),fmts[emailMetric]||(v=>v));
+  }
 }
 
 // ── PUSH/SMS UNIFIED CHART ──

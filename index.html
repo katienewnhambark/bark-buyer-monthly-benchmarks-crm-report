@@ -1,471 +1,91 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Buyer Comms Benchmarks</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{
-  color-scheme: light;
-  --ink:#11131a; --ink-2:#4b5168; --muted:#8a90a6;
-  --bg:#f6f6f4; --surface:#ffffff; --line:#e4e6ef; --rule:#c9ccd9;
-  --navy:#171c39; --accent:#2a78d6;
-  --g-bg:#e3f5e6; --g-fg:#0c6b25;
-  --a-bg:#fdf1d8; --a-fg:#7a5600;
-  --r-bg:#fbe4e4; --r-fg:#9b2020;
-  --b-bg:#e4eefb; --b-fg:#184f95;
-  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --disp:"Syne",var(--sans);
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
-     font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+:root{--bg:#f6f5f1;--card:#fff;--ink:#16161a;--mut:#6b6b73;--line:#e4e2dc;--mast:#121216;--acc:#2a6df4;
+--g:#dff3e4;--gi:#14632f;--a:#fdf0d5;--ai:#8a5a00;--r:#fbe1df;--ri:#9b1c14;--b:#e1ecfd;--bi:#1d4ea8;color-scheme:light}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "IBM Plex Sans",system-ui,sans-serif}
+header{background:var(--mast);color:#fff;padding:28px 24px 0}
+.wrap{max-width:1180px;margin:0 auto}
+h1{font:800 clamp(24px,4vw,36px)/1.1 Syne,sans-serif;margin:0 0 6px;letter-spacing:-.01em}
+.sub{color:#b9b9c2;font:400 13px "IBM Plex Mono",ui-monospace,monospace;margin:0 0 20px}
+nav{display:flex;gap:4px;overflow-x:auto}
+nav button{background:none;border:0;color:#b9b9c2;font:600 13px "IBM Plex Sans",system-ui,sans-serif;padding:12px 14px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+nav button.on{color:#fff;border-color:var(--acc)}
+main{padding:24px 16px 48px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:20px}
+h2{font:600 16px Syne,sans-serif;margin:0 0 4px}.note{color:var(--mut);font-size:12.5px;margin:0 0 12px}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;font-weight:500}
+thead th{font:600 11px "IBM Plex Sans",system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);background:#faf9f6}
+td.n,thead th.n{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:13px}
+tbody th{font-weight:600}code{font:12.5px "IBM Plex Mono",ui-monospace,monospace}
+td.ch{color:var(--mut);font-size:12px;white-space:nowrap}
+.g{background:var(--g);color:var(--gi)}.a{background:var(--a);color:var(--ai)}.r{background:var(--r);color:var(--ri)}.b{background:var(--b);color:var(--bi)}
+.na{color:#b0b0b6}tr.tot th,tr.tot td{border-top:2px solid var(--ink);font-weight:600}
+tr.soon th,tr.soon td{color:#a5a5ad;font-style:italic;background:repeating-linear-gradient(45deg,#fafafa,#fafafa 6px,#f3f3f3 6px,#f3f3f3 12px)}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--mut);margin-top:10px}
+.legend span{padding:2px 8px;border-radius:4px}
+.ctl{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}
+.ctl button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:500 12.5px "IBM Plex Sans",system-ui,sans-serif;cursor:pointer}
+.ctl button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chart{position:relative;height:340px}
+.caveat{background:#fff8e6;border:1px solid #f1dfa8;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:20px}
+footer{color:var(--mut);font-size:12px;text-align:center;padding:0 16px 32px}
+</style></head><body>
+<header><div class="wrap">
+<h1>Buyer comms benchmarks</h1>
+<p class="sub">12 full months · Oct 2025 – Sep 2026 · generated 2 October 2026</p>
+<nav><button class="on" data-t="t1">By channel</button><button data-t="t2">By campaign group</button><button data-t="t3">Monthly trends (email)</button><button data-t="t4">Monthly trends (push/SMS)</button></nav>
+</div></header>
+<main class="wrap">
+<div class="caveat">Weighted benchmarks: raw counts summed across full months, rates computed from totals. Current month (Oct 2026) excluded. Report run on 2 Oct, so Sep 2026 data may still be refreshing in Tableau.</div>
 
-.masthead{background:var(--navy);color:#fff;padding-block:30px;
-          padding-left:20px;padding-right:20px}
-.masthead .inner{max-width:1120px;margin:0 auto}
-.masthead .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;
-                  text-transform:uppercase;color:#9aa2c4;margin-bottom:10px}
-.masthead h1{font-family:var(--disp);font-size:34px;font-weight:800;margin:0 0 8px;
-             letter-spacing:-0.01em;line-height:1.1}
-.masthead p{margin:0;color:#b9c0dc;font-size:14px}
+<section id="t1" class="on">
+<div class="card"><h2>Email</h2><p class="note">Opens are filtered opens (machine opens removed). PPR = project value (£) attributed to email.</p>
+<div class="tw"><table><thead><tr><th>Channel</th><th class="n">Sends</th><th class="n">Open rate</th><th class="n">CTR</th><th class="n">Unsub</th><th class="n">Bounce</th><th class="n">PPR / 1k</th><th class="n">Proj / 1k</th></tr></thead><tbody><tr><th>Marketing</th><td class="n ">732,256,100</td><td class="n ">7.50%</td><td class="n ">0.20%</td><td class="n ">0.07%</td><td class="n ">0.39%</td><td class="n ">£0.94</td><td class="n ">0.23</td></tr><tr><th>Transactional</th><td class="n ">5,391,235</td><td class="n ">26.65%</td><td class="n ">9.32%</td><td class="n ">2.15%</td><td class="n ">0.41%</td><td class="n ">£10.93</td><td class="n ">1.85</td></tr><tr class='tot'><th>All customer email</th><td class="n ">737,647,335</td><td class="n ">7.64%</td><td class="n ">0.26%</td><td class="n ">0.09%</td><td class="n ">0.39%</td><td class="n ">£1.01</td><td class="n ">0.24</td></tr></tbody></table></div></div>
+<div class="card"><h2>Push &amp; SMS</h2><p class="note">7-day post-send attribution. Push: opens tracked, clicks/bounces not. SMS: clicks and bounces tracked, opens not. SMS CTR uses Dec 2025 onward — click tracking was incomplete in Oct–Nov 2025.</p>
+<div class="tw"><table><thead><tr><th>Channel</th><th class="n">Sends</th><th class="n">Open rate</th><th class="n">CTR</th><th class="n">Bounce</th><th class="n">PPR / 1k</th><th class="n">Proj / 1k</th></tr></thead><tbody><tr><th>Push Marketing</th><td class="n ">1,402,879</td><td class="n a">1.03%</td><td class="n "><span class="na">n/a</span></td><td class="n "><span class="na">n/a</span></td><td class="n g">£153.72</td><td class="n ">21.86</td></tr><tr><th>Push Transactional</th><td class="n ">148,621</td><td class="n g">13.77%</td><td class="n "><span class="na">n/a</span></td><td class="n "><span class="na">n/a</span></td><td class="n b">£16.00</td><td class="n ">1.79</td></tr><tr><th>SMS Marketing</th><td class="n ">3,127,884</td><td class="n "><span class="na">n/a</span></td><td class="n g">30.7%</td><td class="n a">5.18%</td><td class="n g">£303.59</td><td class="n ">48.53</td></tr><tr class='soon'><th>Customer WhatsApp</th><td colspan='6'>Coming soon — added once a Customer WhatsApp channel is live</td></tr></tbody></table></div>
+<div class="legend"><span class="g">Strong</span><span class="b">Good</span><span class="a">Watch</span><span class="r">Below threshold</span><span>Thresholds set per channel</span></div></div>
+</section>
 
-.wrap{max-width:1120px;margin:0 auto;padding-block:26px;padding-left:20px;padding-right:20px}
+<section id="t2">
+<div class="card"><h2>Email campaign groups</h2><p class="note">Both customer email channels. Groups with &lt;50k sends excluded (buyer_chat_notification, buyer_marketplace_survey, polaris_gtm_ukie, polaris_no_seller_reply, seller_marketplace). Heat coding vs all-customer-email benchmark: green ≥20% better, red ≥20% worse (unsub and bounce inverted).</p>
+<div class="tw"><table><thead><tr><th>Campaign group</th><th class="n">Sends</th><th class="n">Open rate</th><th class="n">CTR</th><th class="n">Unsub</th><th class="n">Bounce</th><th class="n">PPR / 1k</th><th class="n">Proj / 1k</th></tr></thead><tbody><tr><th><code>buyer_bob</code></th><td class="n ">338,157,231</td><td class="n ">8.83%</td><td class="n r">0.11%</td><td class="n g">0.05%</td><td class="n ">0.46%</td><td class="n r">£0.56</td><td class="n r">0.13</td></tr><tr><th><code>buyer_seasonal</code></th><td class="n ">184,620,680</td><td class="n ">8.50%</td><td class="n r">0.12%</td><td class="n g">0.06%</td><td class="n g">0.33%</td><td class="n r">£0.62</td><td class="n r">0.15</td></tr><tr><th><code>buyer_mop_up</code></th><td class="n ">100,123,819</td><td class="n r">0.89%</td><td class="n r">0.05%</td><td class="n g">0.06%</td><td class="n ">0.36%</td><td class="n r">£0.38</td><td class="n r">0.10</td></tr><tr><th><code>buyer_targeted</code></th><td class="n ">57,415,472</td><td class="n ">6.25%</td><td class="n ">0.24%</td><td class="n ">0.08%</td><td class="n g">0.31%</td><td class="n g">£3.11</td><td class="n g">0.63</td></tr><tr><th><code>buyer_seasonal_polaris</code></th><td class="n ">15,723,284</td><td class="n ">7.02%</td><td class="n r">0.18%</td><td class="n r">0.12%</td><td class="n ">0.34%</td><td class="n r">£0.11</td><td class="n r">0.01</td></tr><tr><th><code>buyer_bob_polaris</code></th><td class="n ">14,864,445</td><td class="n ">6.84%</td><td class="n r">0.14%</td><td class="n r">0.11%</td><td class="n ">0.34%</td><td class="n r">£0.40</td><td class="n r">0.05</td></tr><tr><th><code>buyer_events_based</code></th><td class="n ">3,872,483</td><td class="n g">12.24%</td><td class="n g">1.63%</td><td class="n r">0.72%</td><td class="n ">0.41%</td><td class="n g">£13.50</td><td class="n g">3.48</td></tr><tr><th><code>(unassigned)</code></th><td class="n ">3,612,626</td><td class="n r">1.73%</td><td class="n r">0.11%</td><td class="n ">0.09%</td><td class="n r">0.61%</td><td class="n r">£0.63</td><td class="n r">0.14</td></tr><tr><th><code>buyer_project_resubmit</code></th><td class="n ">3,189,282</td><td class="n g">22.80%</td><td class="n g">6.09%</td><td class="n r">0.48%</td><td class="n g">0.25%</td><td class="n ">£0.84</td><td class="n r">0.19</td></tr><tr><th><code>survey</code></th><td class="n ">2,986,095</td><td class="n g">9.34%</td><td class="n g">0.89%</td><td class="n r">0.41%</td><td class="n r">0.54%</td><td class="n r">£0.03</td><td class="n r">0.01</td></tr><tr><th><code>buyer_bark_review</code></th><td class="n ">2,479,100</td><td class="n g">15.05%</td><td class="n g">1.16%</td><td class="n g">0.00%</td><td class="n g">0.30%</td><td class="n r">£0.00</td><td class="n r">0.00</td></tr><tr><th><code>buyer_no_list_view</code></th><td class="n ">2,274,933</td><td class="n g">27.33%</td><td class="n g">13.74%</td><td class="n r">2.28%</td><td class="n ">0.37%</td><td class="n g">£12.71</td><td class="n g">2.16</td></tr><tr><th><code>buyer_welcome</code></th><td class="n ">1,680,956</td><td class="n g">35.42%</td><td class="n g">7.62%</td><td class="n r">2.19%</td><td class="n r">0.73%</td><td class="n g">£9.70</td><td class="n g">1.08</td></tr><tr><th><code>buyer_app</code></th><td class="n ">1,269,461</td><td class="n r">1.81%</td><td class="n r">0.03%</td><td class="n g">0.05%</td><td class="n g">0.29%</td><td class="n r">£0.16</td><td class="n r">0.01</td></tr><tr><th><code>polaris_mop_up</code></th><td class="n ">1,192,024</td><td class="n r">3.32%</td><td class="n r">0.19%</td><td class="n r">0.11%</td><td class="n ">0.40%</td><td class="n r">£0.02</td><td class="n r">0.00</td></tr><tr><th><code>buyer_abandoned_bark</code></th><td class="n ">1,152,629</td><td class="n g">36.81%</td><td class="n g">19.72%</td><td class="n r">1.39%</td><td class="n g">0.19%</td><td class="n g">£89.36</td><td class="n g">28.95</td></tr><tr><th><code>buyer_no_interaction</code></th><td class="n ">996,491</td><td class="n g">25.33%</td><td class="n g">8.06%</td><td class="n r">2.25%</td><td class="n g">0.23%</td><td class="n g">£9.81</td><td class="n g">2.57</td></tr><tr><th><code>buyer_targeted_polaris</code></th><td class="n ">964,876</td><td class="n g">11.51%</td><td class="n g">0.55%</td><td class="n r">0.20%</td><td class="n ">0.41%</td><td class="n g">£1.83</td><td class="n g">0.52</td></tr><tr><th><code>buyer_retargeting</code></th><td class="n ">519,800</td><td class="n g">18.28%</td><td class="n g">2.46%</td><td class="n r">0.84%</td><td class="n r">0.56%</td><td class="n r">£0.80</td><td class="n r">0.14</td></tr><tr><th><code>buyer_review_seller</code></th><td class="n ">419,268</td><td class="n g">15.68%</td><td class="n g">0.98%</td><td class="n r">0.34%</td><td class="n g">0.11%</td><td class="n r">£0.04</td><td class="n r">0.00</td></tr><tr><th><code>buyer_nurture</code></th><td class="n ">107,661</td><td class="n ">8.76%</td><td class="n g">0.38%</td><td class="n r">0.35%</td><td class="n g">0.18%</td><td class="n g">£4.14</td><td class="n g">0.49</td></tr></tbody></table></div></div>
+<div class="card"><h2>Push &amp; SMS campaign groups</h2><p class="note">Groups with &lt;50k sends excluded: buyer_abandoned_bark (Push Marketing), buyer_app (Push Marketing), buyer_bob (Push Marketing), buyer_mop_up (Push Marketing), buyer_no_interaction (Push Marketing), buyer_nurture (Push Marketing), buyer_review_seller (Push Marketing), buyer_seasonal_polaris (Push Marketing), discount (Push Marketing), polaris_mop_up (Push Marketing), polaris_no_seller_reply (Push Marketing), (unassigned) (Push Transactional), buyer_chat_notification (Push Transactional), seller_chat_notification (Push Transactional), buyer_chat_notification (SMS Marketing), buyer_nurture (SMS Marketing), buyer_project_resubmit (SMS Marketing), buyer_retargeting (SMS Marketing), buyer_targeted (SMS Marketing), buyer_welcome_polaris (SMS Marketing). Heat coding uses the parent channel's thresholds. "(unassigned)" = sends with no campaign group set.</p>
+<div class="tw"><table><thead><tr><th>Channel</th><th>Campaign group</th><th class="n">Sends</th><th class="n">Open rate</th><th class="n">CTR</th><th class="n">Bounce</th><th class="n">PPR / 1k</th><th class="n">Proj / 1k</th></tr></thead><tbody><tr><td class='ch'>Push Marketing</td><th><code>(unassigned)</code></th><td class="n ">598,595</td><td class="n a">1.00%</td><td class="n "><span class="na">n/a</span></td><td class="n "><span class="na">n/a</span></td><td class="n b">£115.80</td><td class="n ">16.29</td></tr><tr><td class='ch'>Push Marketing</td><th><code>buyer_targeted</code></th><td class="n ">479,816</td><td class="n a">0.72%</td><td class="n "><span class="na">n/a</span></td><td class="n "><span class="na">n/a</span></td><td class="n g">£197.79</td><td class="n ">24.37</td></tr><tr><td class='ch'>Push Marketing</td><th><code>buyer_seasonal</code></th><td class="n ">116,439</td><td class="n a">0.52%</td><td class="n "><span class="na">n/a</span></td><td class="n "><span class="na">n/a</span></td><td class="n ">£86.17</td><td class="n ">10.03</td></tr><tr><td class='ch'>Push Marketing</td><th><code>buyer_retargeting</code></th><td class="n ">64,923</td><td class="n r">0.20%</td><td class="n "><span class="na">n/a</span></td><td class="n "><span class="na">n/a</span></td><td class="n r">£9.22</td><td class="n r">1.46</td></tr><tr><td class='ch'>Push Transactional</td><th><code>seller_marketplace</code></th><td class="n ">91,956</td><td class="n g">15.35%</td><td class="n "><span class="na">n/a</span></td><td class="n "><span class="na">n/a</span></td><td class="n ">£5.07</td><td class="n r">0.22</td></tr><tr><td class='ch'>SMS Marketing</td><th><code>(unassigned)</code></th><td class="n ">1,210,872</td><td class="n "><span class="na">n/a</span></td><td class="n g">32.5%</td><td class="n g">2.59%</td><td class="n b">£279.95</td><td class="n ">44.29</td></tr><tr><td class='ch'>SMS Marketing</td><th><code>buyer_app</code></th><td class="n ">869,443</td><td class="n "><span class="na">n/a</span></td><td class="n g">34.5%</td><td class="n a">5.94%</td><td class="n g">£531.10</td><td class="n g">85.08</td></tr><tr><td class='ch'>SMS Marketing</td><th><code>buyer_bob</code></th><td class="n ">759,663</td><td class="n "><span class="na">n/a</span></td><td class="n a">24.3%</td><td class="n r">8.59%</td><td class="n r">£39.19</td><td class="n r">4.45</td></tr><tr><td class='ch'>SMS Marketing</td><th><code>buyer_abandoned_bark</code></th><td class="n ">160,788</td><td class="n "><span class="na">n/a</span></td><td class="n g">33.1%</td><td class="n a">7.37%</td><td class="n g">£562.05</td><td class="n g">103.88</td></tr><tr><td class='ch'>SMS Marketing</td><th><code>survey</code></th><td class="n ">92,708</td><td class="n "><span class="na">n/a</span></td><td class="n a">29.9%</td><td class="n g">0.79%</td><td class="n ">£181.34</td><td class="n ">21.81</td></tr></tbody></table></div></div>
+</section>
 
-.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--rule);margin-bottom:24px}
-.tab{appearance:none;background:transparent;border:0;border-bottom:2px solid transparent;
-     font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink-2);
-     padding:10px 14px;cursor:pointer;white-space:nowrap}
-.tab:hover{color:var(--ink)}
-.tab[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--accent)}
-.panel[hidden]{display:none}
-
-h2{font-family:var(--disp);font-size:19px;font-weight:600;margin:0 0 4px;letter-spacing:-0.005em}
-.note{color:var(--ink-2);font-size:13px;margin:0 0 14px}
-section + section{margin-top:34px}
-
-.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 0}
-.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-
-table{width:100%;border-collapse:collapse;font-size:13.5px}
-th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-th{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.06em;
-   text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--rule)}
-th:first-child,td:first-child{text-align:left}
-td{font-family:var(--mono);font-variant-numeric:tabular-nums}
-td:first-child{font-family:var(--sans);font-weight:500}
-tbody tr:last-child td{border-bottom:none}
-.heat{border-radius:4px;padding:3px 7px;display:inline-block;font-weight:500}
-.g{background:var(--g-bg);color:var(--g-fg)}
-.a{background:var(--a-bg);color:var(--a-fg)}
-.r{background:var(--r-bg);color:var(--r-fg)}
-.b{background:var(--b-bg);color:var(--b-fg)}
-.na{color:var(--muted)}
-tr.soon td{color:var(--muted);font-style:italic}
-.sub{font-family:var(--sans);font-size:11px;color:var(--muted);font-weight:400}
-
-.ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-label{font-size:12px;font-weight:600;color:var(--ink-2)}
-select{font-family:var(--sans);font-size:13px;padding:6px 10px;border:1px solid var(--rule);
-       border-radius:6px;background:var(--surface);color:var(--ink)}
-.chart{width:100%;height:auto;display:block;overflow:visible}
-.gridline{stroke:var(--line);stroke-width:1}
-.baseline{stroke:var(--rule);stroke-width:1}
-.tick{fill:var(--muted);font-size:10px;font-family:var(--mono)}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin-top:10px}
-.legend span{display:inline-flex;align-items:center;gap:6px}
-.sw{width:14px;height:3px;border-radius:2px;display:inline-block}
-
-.callout{border-left:3px solid var(--accent);background:var(--surface);
-         border:1px solid var(--line);border-left:3px solid var(--accent);
-         border-radius:0 10px 10px 0;padding:14px 18px;margin-top:14px}
-.callout.warn{border-left-color:#d8a40a}
-.callout h3{margin:0 0 5px;font-size:14px;font-weight:700;font-family:var(--sans)}
-.callout p{margin:0;font-size:13.5px;color:var(--ink-2)}
-.callout p + p{margin-top:7px}
-
-footer{max-width:1120px;margin:0 auto;padding:26px 20px 40px;
-       border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
-footer p{margin:0 0 6px}
-code{font-family:var(--mono);font-size:11px;background:var(--line);padding:1px 5px;border-radius:4px}
-</style>
-</head>
-<body>
-
-<div class="masthead">
-  <div class="inner">
-    <div class="kicker">Bark CRM · Buyer comms</div>
-    <h1>Monthly benchmarking</h1>
-    <p>12 full months · October 2025 – September 2026 · Generated 1 October 2026</p>
-  </div>
-</div>
-
-<div class="wrap">
-
-<div class="tabs" role="tablist">
-  <button class="tab" role="tab" aria-selected="true" aria-controls="p1" id="t1">By channel</button>
-  <button class="tab" role="tab" aria-selected="false" aria-controls="p2" id="t2">By campaign group</button>
-  <button class="tab" role="tab" aria-selected="false" aria-controls="p3" id="t3">Monthly trends — email</button>
-  <button class="tab" role="tab" aria-selected="false" aria-controls="p4" id="t4">Monthly trends — push & SMS</button>
-</div>
-
-<!-- TAB 1 -->
-<div class="panel" id="p1" role="tabpanel" aria-labelledby="t1">
-  <section>
-    <h2>Email channels</h2>
-    <p class="note">Weighted averages across 12 full months. Rates computed from summed counts, never averaged.</p>
-    <div class="card scroll">
-      <table>
-        <thead><tr><th>Channel</th><th>Sends</th><th>Open rate</th><th>CTR</th><th>Unsub</th><th>Bounce</th><th>PPR / 1k</th><th>Proj / 1k</th></tr></thead>
-        <tbody>
-          <tr><td>Customer Marketing</td><td>732,256,100</td>
-            <td><span class="heat g">7.49%</span></td><td><span class="heat r">0.195%</span></td>
-            <td><span class="heat g">0.070%</span></td><td><span class="heat g">0.392%</span></td>
-            <td><span class="heat r">£0.94</span></td><td><span class="heat r">0.23</span></td></tr>
-          <tr><td>Customer Transactional</td><td>5,391,235</td>
-            <td><span class="heat g">26.63%</span></td><td><span class="heat g">9.317%</span></td>
-            <td><span class="heat r">2.150%</span></td><td><span class="heat g">0.410%</span></td>
-            <td><span class="heat g">£10.88</span></td><td><span class="heat g">1.85</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2>Push &amp; SMS channels</h2>
-    <p class="note">Metrics differ by medium: push records opens but not clicks or bounces; SMS records clicks and bounces but not opens.</p>
-    <div class="card scroll">
-      <table>
-        <thead><tr><th>Channel</th><th>Sends</th><th>Open rate</th><th>CTR</th><th>Bounce</th><th>PPR / 1k</th><th>Proj / 1k</th></tr></thead>
-        <tbody>
-          <tr><td>Customer Push Marketing</td><td>1,402,879</td>
-            <td><span class="heat a">1.03%</span></td><td class="na">n/a</td><td class="na">n/a</td>
-            <td><span class="heat g">£153.05</span></td><td><span class="heat r">21.81</span></td></tr>
-          <tr><td>Customer Push Transactional</td><td>148,621</td>
-            <td><span class="heat g">13.77%</span></td><td class="na">n/a</td><td class="na">n/a</td>
-            <td><span class="heat g">£16.00</span></td><td><span class="heat r">1.79</span></td></tr>
-          <tr><td>Customer SMS Marketing</td><td>3,127,884</td>
-            <td class="na">n/a</td><td><span class="heat a">27.69%</span></td><td><span class="heat a">5.18%</span></td>
-            <td><span class="heat g">£303.08</span></td><td><span class="heat g">48.47</span></td></tr>
-          <tr class="soon"><td>Customer WhatsApp — coming soon</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="callout">
-      <h3>WhatsApp is not yet a Customer channel</h3>
-      <p>WhatsApp volume exists (roughly 88K UK messages since mid-August) but is not routed through
-         a Customer WhatsApp channel, so it can't be benchmarked here. It will be added once the
-         channel is live.</p>
-    </div>
-  </section>
-
-  <section>
-    <h2>What stands out</h2>
-    <div class="callout">
-      <h3>SMS earns £303 of PPR per 1,000 sends; marketing email earns £0.94</h3>
-      <p>A 322× gap per message. SMS is 0.4% of buyer send volume and delivers more attributed
-         project revenue per thousand than any other channel. Push Marketing is second at £153.</p>
-      <p>Volume sits almost entirely where return per message is lowest: 732M marketing emails
-         against 3.1M SMS. That is the shape of the year, not a one-month anomaly.</p>
-    </div>
-    <div class="callout warn">
-      <h3>SMS bounce rate is 5.18% — above the 5% amber line</h3>
-      <p>Driven by January (77,620 bounces on 957,484 sends, 8.1%) and <code>buyer_bob</code>
-         SMS at 8.59% across the year. Worth a number-quality pass on that group before it
-         drags the channel average further.</p>
-    </div>
-  </section>
-</div>
-
-<!-- TAB 2 -->
-<div class="panel" id="p2" role="tabpanel" aria-labelledby="t2" hidden>
-  <section>
-    <h2>Email campaign groups</h2>
-    <p class="note">Groups with at least 50,000 sends across the 12 months. Sorted by volume.</p>
-    <div class="card scroll">
-      <table>
-        <thead><tr><th>Campaign group</th><th>Sends</th><th>Open rate</th><th>CTR</th><th>Unsub</th><th>Bounce</th><th>PPR / 1k</th><th>Proj / 1k</th></tr></thead>
-        <tbody id="emg"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2>Push &amp; SMS campaign groups</h2>
-    <p class="note">Groups with at least 50,000 sends. Medium shown because the available metrics differ.</p>
-    <div class="card scroll">
-      <table>
-        <thead><tr><th>Campaign group</th><th>Medium</th><th>Sends</th><th>Open rate</th><th>CTR</th><th>Bounce</th><th>PPR / 1k</th><th>Proj / 1k</th></tr></thead>
-        <tbody id="psg"></tbody>
-      </table>
-    </div>
-    <div class="callout">
-      <h3>Abandoned bark is the strongest group in every channel it runs in</h3>
-      <p>SMS £561.51 PPR/1k and 103.75 projects/1k; email £89.26 and 28.92 — roughly 95× the
-         marketing-email average on revenue per thousand. It is also one of the smallest by volume
-         at 1.15M emails and 161K SMS.</p>
-      <p>The largest unlabelled bucket is 1.21M SMS sends with no campaign group — 39% of SMS
-         volume, performing at £279/1k. Worth labelling so it stops hiding inside the average.</p>
-    </div>
-  </section>
-</div>
-
-<!-- TAB 3 -->
-<div class="panel" id="p3" role="tabpanel" aria-labelledby="t3" hidden>
-  <section>
-    <h2>Monthly trends — email</h2>
-    <p class="note">Customer Marketing and Customer Transactional, 12 full months.</p>
-    <div class="ctl">
-      <label for="em-metric">Metric</label>
-      <select id="em-metric">
-        <option value="sends">Sends</option>
-        <option value="or" selected>Open rate</option>
-        <option value="ctr">Click-through rate</option>
-        <option value="unsub">Unsubscribe rate</option>
-        <option value="bounce">Bounce rate</option>
-        <option value="ppr">PPR per 1k</option>
-        <option value="proj">Projects per 1k</option>
-      </select>
-    </div>
-    <div class="card" style="padding:18px 20px">
-      <svg class="chart" id="em-chart" viewBox="0 0 1000 340" role="img"
-           aria-label="Monthly trend chart for email channels"></svg>
-      <div class="legend">
-        <span><i class="sw" style="background:#2a78d6"></i>Customer Marketing</span>
-        <span><i class="sw" style="background:#eb6834"></i>Customer Transactional</span>
-      </div>
-    </div>
-  </section>
-</div>
-
-<!-- TAB 4 -->
-<div class="panel" id="p4" role="tabpanel" aria-labelledby="t4" hidden>
-  <section>
-    <h2>Monthly trends — push &amp; SMS</h2>
-    <p class="note">Push Marketing, Push Transactional and SMS Marketing. A series is hidden when
-       the selected metric is not recorded for that medium.</p>
-    <div class="ctl">
-      <label for="ps-metric">Metric</label>
-      <select id="ps-metric">
-        <option value="sends" selected>Sends</option>
-        <option value="or">Open rate (push)</option>
-        <option value="ctr">CTR (SMS)</option>
-        <option value="bounce">Bounce rate (SMS)</option>
-        <option value="ppr">PPR per 1k</option>
-        <option value="proj">Projects per 1k</option>
-      </select>
-    </div>
-    <div class="card" style="padding:18px 20px">
-      <svg class="chart" id="ps-chart" viewBox="0 0 1000 340" role="img"
-           aria-label="Monthly trend chart for push and SMS channels"></svg>
-      <div class="legend" id="ps-legend"></div>
-    </div>
-  </section>
-</div>
-
-</div>
-
-<footer>
-  <p><b>Sources.</b> Tableau — 🗂️ Email - Country-Date-Domain-Campaign
-     (<code>db6fb249-933c-4d97-85da-4869afd5e69b</code>), filtered to Customer Marketing and
-     Customer Transactional channels; 🗂️ CRM - Push-SMS-Whatsapp Reporting
-     (<code>6a536c4f-a5b3-4f40-882d-ef85acc470c5</code>), filtered to the three Customer push and
-     SMS channels and to <code>Attribution Mode = any_7d_post_send</code>.</p>
-  <p><b>Method.</b> 12 full calendar months, October 2025 – September 2026. October 2026 excluded
-     as a partial month. Weighted averages: raw counts summed across months, then rates computed
-     from the totals — never an average of monthly rates. Campaign groups below 50,000 sends across
-     the window are excluded, applied separately to email and to push/SMS.</p>
-  <p><b>Caveats.</b> Push records opens but not clicks or bounces; SMS records clicks and bounces
-     but not opens — shown as n/a rather than zero. Email open rates from mid-August 2026 are
-     understated by an Iterable tracking fault affecting machine and proxy opens, which pulls the
-     12-month marketing open-rate average down slightly. PPR and project attribution is 7-day
-     post-send.</p>
-</footer>
-
+<section id="t3"><div class="card"><h2>Email monthly trends</h2><p class="note">Marketing on the left axis, Transactional on the right.</p>
+<div class="ctl" id="c3"></div><div class="chart"><canvas id="ch3"></canvas></div></div></section>
+<section id="t4"><div class="card"><h2>Push &amp; SMS monthly trends</h2><p class="note">Only channels where the metric is tracked are shown.</p>
+<div class="ctl" id="c4"></div><div class="chart"><canvas id="ch4"></canvas></div></div></section>
+</main>
+<footer>Sources: Tableau — Email - Country-Date-Domain-Campaign; CRM - Push / SMS / Whatsapp Reporting</footer>
 <script>
-(function(){
-  /* tabs */
-  var tabs=[].slice.call(document.querySelectorAll('.tab'));
-  tabs.forEach(function(t){
-    t.addEventListener('click',function(){
-      tabs.forEach(function(x){
-        x.setAttribute('aria-selected', x===t ? 'true':'false');
-        document.getElementById(x.getAttribute('aria-controls')).hidden = (x!==t);
-      });
-      draw(); drawPS();
-    });
-  });
-
-  function fmt(n){ return n.toLocaleString('en-GB'); }
-  function heat(v,cls){ return '<span class="heat '+cls+'">'+v+'</span>'; }
-
-  /* ---- campaign group tables ---- */
-  var emg=[
-   ["buyer_bob",338157231,8.83,0.111,0.053,0.454,0.56,0.127],
-   ["buyer_seasonal",184620680,8.50,0.123,0.061,0.327,0.62,0.150],
-   ["buyer_mop_up",100123819,0.88,0.051,0.057,0.361,0.38,0.096],
-   ["buyer_targeted",57415472,6.25,0.238,0.082,0.310,3.11,0.632],
-   ["buyer_seasonal_polaris",15723284,7.02,0.177,0.123,0.337,0.11,0.013],
-   ["buyer_bob_polaris",14864445,6.84,0.139,0.112,0.344,0.40,0.048],
-   ["buyer_events_based",3872483,12.23,1.627,0.723,0.408,13.48,3.480],
-   ["(unlabelled)",3612626,1.73,0.114,0.095,0.612,0.63,0.144],
-   ["buyer_project_resubmit",3189282,22.79,6.091,0.484,0.255,0.84,0.186],
-   ["survey",2986095,9.33,0.893,0.414,0.536,0.03,0.009],
-   ["buyer_bark_review",2479100,15.04,1.159,0.000,0.301,0.00,0.000],
-   ["buyer_no_list_view",2274933,27.31,13.725,2.275,0.370,12.70,2.152],
-   ["buyer_welcome",1680956,35.41,7.618,2.190,0.726,9.59,1.073],
-   ["buyer_app",1269461,1.81,0.031,0.053,0.289,0.16,0.014],
-   ["polaris_mop_up",1192024,3.32,0.187,0.114,0.404,0.02,0.001],
-   ["buyer_abandoned_bark",1152629,36.79,19.712,1.387,0.189,89.26,28.917],
-   ["buyer_no_interaction",996491,25.31,8.047,2.247,0.226,9.78,2.564],
-   ["buyer_targeted_polaris",964876,11.50,0.545,0.203,0.415,1.83,0.517],
-   ["buyer_retargeting",519800,18.27,2.457,0.838,0.562,0.80,0.140],
-   ["buyer_review_seller",419268,15.67,0.981,0.344,0.110,0.04,0.005],
-   ["buyer_nurture",107661,8.73,0.378,0.348,0.176,4.14,0.474]
-  ];
-  function eOR(v){ return v>=8?'g':v>=4?'a':'r'; }
-  function eCTR(v){ return v>=0.5?'g':v>=0.2?'a':'r'; }
-  function eUN(v){ return v>2?'r':v>=0.5?'a':'g'; }
-  function eBN(v){ return v>1?'r':v>0.5?'a':'g'; }
-  function ePPR(v){ return v>=1?'g':v>=0.5?'b':'r'; }
-  function ePRJ(v){ return v>=0.3?'g':v>=0.15?'b':'r'; }
-  document.getElementById('emg').innerHTML = emg.map(function(r){
-    return '<tr><td>'+r[0]+'</td><td>'+fmt(r[1])+'</td>'
-      +'<td>'+heat(r[2].toFixed(2)+'%',eOR(r[2]))+'</td>'
-      +'<td>'+heat(r[3].toFixed(3)+'%',eCTR(r[3]))+'</td>'
-      +'<td>'+heat(r[4].toFixed(3)+'%',eUN(r[4]))+'</td>'
-      +'<td>'+heat(r[5].toFixed(3)+'%',eBN(r[5]))+'</td>'
-      +'<td>'+heat('£'+r[6].toFixed(2),ePPR(r[6]))+'</td>'
-      +'<td>'+heat(r[7].toFixed(2),ePRJ(r[7]))+'</td></tr>';
-  }).join('');
-
-  var psg=[
-   ["(unlabelled)","SMS",1210872,null,28.24,2.59,279.45,44.24],
-   ["buyer_app","SMS",869443,null,29.79,5.94,530.13,84.95],
-   ["buyer_bob","SMS",759663,null,24.28,8.59,39.19,4.45],
-   ["(unlabelled)","Push",598614,1.00,null,null,115.04,16.25],
-   ["buyer_targeted","Push",479816,0.72,null,null,196.97,24.30],
-   ["buyer_abandoned_bark","SMS",160788,null,29.32,7.37,561.51,103.75],
-   ["buyer_seasonal","Push",116439,0.52,null,null,86.17,10.02],
-   ["survey","SMS",92708,null,29.88,0.79,181.34,21.81],
-   ["seller_marketplace","Push",91956,15.35,null,null,5.07,0.22],
-   ["buyer_retargeting","Push",64923,0.20,null,null,9.22,1.46]
-  ];
-  function pOR(v){ return v>=2?'g':v>=0.5?'a':'r'; }
-  function sCTR(v){ return v>=30?'g':v>=20?'a':'r'; }
-  function sBN(v){ return v>8?'r':v>5?'a':'g'; }
-  function pPPR(v){ return v>=150?'g':v>=100?'b':v<50?'r':'a'; }
-  function pPRJ(v){ return v>=25?'g':v<10?'r':'a'; }
-  function sPPR(v){ return v>=300?'g':v>=200?'b':v<100?'r':'a'; }
-  function sPRJ(v){ return v>=50?'g':v<20?'r':'a'; }
-  document.getElementById('psg').innerHTML = psg.map(function(r){
-    var sms = r[1]==='SMS';
-    return '<tr><td>'+r[0]+'</td><td class="sub">'+r[1]+'</td><td>'+fmt(r[2])+'</td>'
-      +'<td>'+(r[3]==null?'<span class="na">n/a</span>':heat(r[3].toFixed(2)+'%',pOR(r[3])))+'</td>'
-      +'<td>'+(r[4]==null?'<span class="na">n/a</span>':heat(r[4].toFixed(2)+'%',sCTR(r[4])))+'</td>'
-      +'<td>'+(r[5]==null?'<span class="na">n/a</span>':heat(r[5].toFixed(2)+'%',sBN(r[5])))+'</td>'
-      +'<td>'+heat('£'+r[6].toFixed(2), sms?sPPR(r[6]):pPPR(r[6]))+'</td>'
-      +'<td>'+heat(r[7].toFixed(2), sms?sPRJ(r[7]):pPRJ(r[7]))+'</td></tr>';
-  }).join('');
-
-  /* ---- charts ---- */
-  var NS='http://www.w3.org/2000/svg';
-  function el(n,a,t){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;return e;}
-  var MONTHS=["Oct 25","Nov 25","Dec 25","Jan 26","Feb 26","Mar 26","Apr 26","May 26","Jun 26","Jul 26","Aug 26","Sep 26"];
-
-  // email: [sends, fopens, clicks, unsubs, bounces, ppr, projects]
-  var EM={
-   "Customer Marketing":[[61196136,6163292,153399,46704,396149,70394.35,16685],[53910305,5383703,124314,40366,299467,61298.98,13285],[62824547,6033367,81769,41707,278127,45943.63,11890],[59724721,5957485,105400,47538,231815,61190.35,14615],[50893711,4984126,104369,37682,209076,57816.26,12555],[56102261,4100344,123181,38664,225545,61582.42,14089],[53274697,3847783,117662,36537,178646,56850.70,13543],[64432210,4044687,131451,44751,261622,59724.35,14825],[71195997,4112049,119325,45286,221230,61526.16,15126],[76453771,4558512,131558,49991,217777,59102.07,14946],[59822802,2857513,116209,46173,166967,46034.70,11980],[62424942,2825122,120111,37103,185132,45834.18,11740]],
-   "Customer Transactional":[[310806,69985,31369,6418,2259,3504.08,552],[306841,69278,28815,6363,2371,3390.55,561],[357706,96651,29722,7448,3082,2330.22,519],[537768,155471,48983,12509,5199,4525.27,709],[495667,152167,47334,11272,2589,5918.00,797],[540968,147034,47508,11037,1002,6223.04,867],[478626,129296,45356,10223,848,5650.27,851],[471974,129195,46281,9792,988,6117.41,1094],[496151,141564,51220,10858,960,5965.12,1210],[505832,139317,47969,10677,870,5259.46,1007],[442628,105593,39430,9709,891,5316.36,955],[446268,100243,38322,9586,1033,4441.75,845]]
-  };
-  // push/sms: [sends, opens, clicks, bounces, ppr, projects]
-  var PS={
-   "Push Marketing":[[130174,555,0,0,16418.45,1521],[125444,759,0,0,14735.77,1552],[130054,465,0,0,8737.25,1199],[128280,537,0,0,14975.82,1674],[107626,856,0,0,18510.20,2111],[85890,1247,0,0,20372.92,2842],[85207,1353,0,0,19278.00,2844],[93326,1573,0,0,20791.34,3611],[101765,1814,0,0,21902.72,3677],[198986,2168,0,0,24610.48,4015],[101263,1467,0,0,16441.26,2837],[114864,1627,0,0,17940.07,2707]],
-   "Push Transactional":[[17531,2448,0,0,379.42,35],[16457,2003,0,0,22.75,11],[15519,1812,0,0,101.85,10],[13563,1677,0,0,60.84,14],[10178,1189,0,0,15.27,17],[8886,981,0,0,43.31,12],[10033,1290,0,0,247.06,36],[12660,1777,0,0,358.10,16],[12451,1950,0,0,502.12,39],[12731,2049,0,0,348.33,38],[10685,1842,0,0,108.44,22],[7927,1444,0,0,190.89,16]],
-   "SMS Marketing":[[246373,0,0,10933,91375.48,13397],[153665,0,27564,6465,59263.38,8721],[172766,0,58762,7832,60035.20,11083],[957484,0,255590,77620,131711.04,19252],[247827,0,78728,12712,72317.68,9672],[194706,0,67655,8150,75199.34,9901],[185132,0,64183,7491,67099.94,10477],[183260,0,64052,7351,87476.31,15456],[189638,0,66135,7112,83061.69,15444],[275544,0,76214,6941,87725.22,15721],[157625,0,49179,4799,69385.39,11859],[163864,0,57962,4669,63335.42,10619]]
-  };
-  var COL={"Customer Marketing":"#2a78d6","Customer Transactional":"#eb6834",
-           "Push Marketing":"#2a78d6","Push Transactional":"#eb6834","SMS Marketing":"#1baf7a"};
-
-  function emVal(r,m){
-    if(m==='sends') return r[0];
-    if(m==='or') return r[1]/r[0]*100;
-    if(m==='ctr') return r[2]/r[0]*100;
-    if(m==='unsub') return r[3]/r[0]*100;
-    if(m==='bounce') return r[4]/r[0]*100;
-    if(m==='ppr') return r[5]/(r[0]/1000);
-    return r[6]/(r[0]/1000);
+const T={"labels": ["Oct 25", "Nov 25", "Dec 25", "Jan 26", "Feb 26", "Mar 26", "Apr 26", "May 26", "Jun 26", "Jul 26", "Aug 26", "Sep 26"], "em": {"Marketing": [{"sends": 61196136, "or_": 10.0713744410268, "ctr": 0.2506677872602937, "unsub": 0.07631854403356447, "bounce": 0.6473431590517414, "ppr": 1.1503070379156248, "proj": 0.2726479331963051}, {"sends": 53910305, "or_": 9.9864079789569, "ctr": 0.23059413223501518, "unsub": 0.07487622264426069, "bounce": 0.5554911996880745, "ppr": 1.1370548757254724, "proj": 0.2464278397237782}, {"sends": 62824547, "or_": 9.6035185100499, "ctr": 0.13015453975338653, "unsub": 0.06638647151725582, "bounce": 0.44270434612127013, "ppr": 0.731300646261111, "proj": 0.18925723411901402}, {"sends": 59724721, "or_": 9.974906370847677, "ctr": 0.17647633716028577, "unsub": 0.07959518136551864, "bounce": 0.38813910909688465, "ppr": 1.0245398074156655, "proj": 0.24470604056903003}, {"sends": 50893711, "or_": 9.793206080020378, "ctr": 0.20507248921187923, "unsub": 0.07404058234228586, "bounce": 0.41080910763217876, "ppr": 1.136019670111563, "proj": 0.24669059797977788}, {"sends": 56102261, "or_": 7.308696524726517, "ctr": 0.21956512590464045, "unsub": 0.06891700853197343, "bounce": 0.4020247953999572, "ppr": 1.097681606807255, "proj": 0.25113069863619225}, {"sends": 53274697, "or_": 7.222533804368704, "ctr": 0.22085906936270328, "unsub": 0.06858227649797802, "bounce": 0.3353299221955218, "ppr": 1.0671238085596249, "proj": 0.25421073722859466}, {"sends": 64432210, "or_": 6.2774301859271935, "ctr": 0.20401442073770246, "unsub": 0.06945439245371221, "bounce": 0.4060422574361488, "ppr": 0.926933105998796, "proj": 0.23008678423415865}, {"sends": 71195997, "or_": 5.775674438550246, "ctr": 0.1676007149671631, "unsub": 0.06360750871990739, "bounce": 0.31073376218047766, "ppr": 0.8641800324375392, "proj": 0.2124557648936358}, {"sends": 76453771, "or_": 5.962442323479374, "ctr": 0.17207522700221026, "unsub": 0.06538722596168604, "bounce": 0.2848479507963054, "ppr": 0.7730432291449422, "proj": 0.19549068416782217}, {"sends": 59822802, "or_": 4.776628483567186, "ctr": 0.19425536102437996, "unsub": 0.077182944389666, "bounce": 0.27910260706277185, "ppr": 0.7695176163764444, "proj": 0.2002580888805576}, {"sends": 62424942, "or_": 4.552709075804988, "ctr": 0.19354283100495312, "unsub": 0.06007694808911477, "bounce": 0.3078096572360452, "ppr": 0.7506489953967438, "proj": 0.19088523942881677}], "Transactional": [{"sends": 310806, "or_": 22.517261571526934, "ctr": 10.092791001460718, "unsub": 2.0649537010225028, "bounce": 0.7268199455608965, "ppr": 11.274171026299364, "proj": 1.776027489816799}, {"sends": 306841, "or_": 22.577817175670788, "ctr": 9.390857154030915, "unsub": 2.073712443904172, "bounce": 0.7727129034255527, "ppr": 11.0498596993231, "proj": 1.8283084724661958}, {"sends": 357706, "or_": 27.01967537586733, "ctr": 8.30905827690897, "unsub": 2.082156855070924, "bounce": 0.8616014268701112, "ppr": 6.514344182093674, "proj": 1.4509122016404532}, {"sends": 537768, "or_": 28.91042233825739, "ctr": 9.108574701358206, "unsub": 2.326096011663022, "bounce": 0.9667737760521264, "ppr": 8.414918609288199, "proj": 1.3184124008866276}, {"sends": 495667, "or_": 30.699441358815495, "ctr": 9.54955645624986, "unsub": 2.274107414857152, "bounce": 0.5223264812868317, "ppr": 11.939467424702471, "proj": 1.6079343591564499}, {"sends": 540968, "or_": 27.179796217151477, "ctr": 8.78203516659026, "unsub": 2.0402315848626906, "bounce": 0.18522352523624316, "ppr": 11.503527010839827, "proj": 1.6026825986010265}, {"sends": 478626, "or_": 27.013994225136116, "ctr": 9.476292554102786, "unsub": 2.1359056967235377, "bounce": 0.1771738267457263, "ppr": 11.805188184511497, "proj": 1.7780062094411921}, {"sends": 471974, "or_": 27.3733298868158, "ctr": 9.805836762194527, "unsub": 2.074690554988199, "bounce": 0.20933356498451186, "ppr": 12.961328378258127, "proj": 2.3179242924398378}, {"sends": 496151, "or_": 28.532442744245202, "ctr": 10.323470072619022, "unsub": 2.1884466624072108, "bounce": 0.19348948203268762, "ppr": 12.022791272721271, "proj": 2.4387736797870003}, {"sends": 505832, "or_": 27.54214838128074, "ctr": 9.483188094070758, "unsub": 2.1107798636701514, "bounce": 0.1719938635752582, "ppr": 10.397641904822155, "proj": 1.9907795473595977}, {"sends": 442628, "or_": 23.8559241620503, "ctr": 8.908157640275807, "unsub": 2.1934897927831045, "bounce": 0.20129770371508354, "ppr": 12.010898542342556, "proj": 2.1575679803356316}, {"sends": 446268, "or_": 22.62317710434089, "ctr": 8.665644859142937, "unsub": 2.166187134188425, "bounce": 0.2337160629935375, "ppr": 10.543283408176254, "proj": 1.933815554778743}]}, "ps": {"Push Marketing": [{"sends": 130174, "ppr": 126.12695315500794, "proj": 11.684360932290625, "or_": 0.42635242060626544, "ctr": null, "bounce": null}, {"sends": 125444, "ppr": 117.4689187339902, "proj": 12.372054462549025, "or_": 0.6050508593475974, "ctr": null, "bounce": null}, {"sends": 130054, "ppr": 67.18170913620497, "proj": 9.219247389545881, "or_": 0.3575437895028219, "ctr": null, "bounce": null}, {"sends": 128280, "ppr": 116.74325239060389, "proj": 13.04957904583723, "or_": 0.41861552853133766, "ctr": null, "bounce": null}, {"sends": 107626, "ppr": 171.98635688247577, "proj": 19.614219612361325, "or_": 0.795346849274339, "ctr": null, "bounce": null}, {"sends": 85890, "ppr": 237.19781115380138, "proj": 33.08883455582722, "or_": 1.4518570264291537, "ctr": null, "bounce": null}, {"sends": 85207, "ppr": 226.24901898017535, "proj": 33.377539404039574, "or_": 1.587897707934794, "ctr": null, "bounce": null}, {"sends": 93326, "ppr": 222.78186143196967, "proj": 38.692325825600584, "or_": 1.6854895741808287, "ctr": null, "bounce": null}, {"sends": 101765, "ppr": 215.22841841497566, "proj": 36.132265513683485, "or_": 1.7825382007566453, "ctr": null, "bounce": null}, {"sends": 198986, "ppr": 123.67945483601864, "proj": 20.177298905450634, "or_": 1.0895238861025398, "ctr": null, "bounce": null}, {"sends": 101263, "ppr": 162.36196833986745, "proj": 28.016155950347116, "or_": 1.4487028825928523, "ctr": null, "bounce": null}, {"sends": 114864, "ppr": 164.27618749129402, "proj": 24.228653015740353, "or_": 1.4164577239169802, "ctr": null, "bounce": null}], "Push Transactional": [{"sends": 17531, "ppr": 21.64280417546061, "proj": 1.996463407677828, "or_": 13.963835491415209, "ctr": null, "bounce": null}, {"sends": 16457, "ppr": 1.382390472139515, "proj": 0.6684085799355897, "or_": 12.17111259646351, "ctr": null, "bounce": null}, {"sends": 15519, "ppr": 6.562922868741542, "proj": 0.6443714156840002, "or_": 11.676010052194083, "ctr": null, "bounce": null}, {"sends": 13563, "ppr": 4.485733244857332, "proj": 1.0322200103222001, "or_": 12.364521123645211, "ctr": null, "bounce": null}, {"sends": 10178, "ppr": 1.5002947533896638, "proj": 1.670269208095893, "or_": 11.682059343682452, "ctr": null, "bounce": null}, {"sends": 8886, "ppr": 4.873959036686923, "proj": 1.350438892640108, "or_": 11.039837947332883, "ctr": null, "bounce": null}, {"sends": 10033, "ppr": 24.62473836340078, "proj": 3.5881590750523276, "or_": 12.857570018937507, "ctr": null, "bounce": null}, {"sends": 12660, "ppr": 28.285939968404424, "proj": 1.263823064770932, "or_": 14.036334913112164, "ctr": null, "bounce": null}, {"sends": 12451, "ppr": 40.327684523331456, "proj": 3.1322785318448316, "or_": 15.661392659224157, "ctr": null, "bounce": null}, {"sends": 12731, "ppr": 27.360772916503024, "proj": 2.9848401539549134, "or_": 16.09457230382531, "ctr": null, "bounce": null}, {"sends": 10685, "ppr": 10.148806738418344, "proj": 2.0589611605053815, "or_": 17.2391202620496, "ctr": null, "bounce": null}, {"sends": 7927, "ppr": 24.080989024851775, "proj": 2.0184180648416805, "or_": 18.27929859972247, "ctr": null, "bounce": null}], "SMS Marketing": [{"sends": 246373, "ppr": 370.88268780779237, "proj": 54.37690006615985, "or_": null, "ctr": null, "bounce": 4.43758041668527}, {"sends": 153665, "ppr": 385.66610931246544, "proj": 56.75332704259266, "or_": null, "ctr": null, "bounce": 4.207203982689617}, {"sends": 172766, "ppr": 347.49431622587497, "proj": 64.15035365754837, "or_": null, "ctr": 34.01247930727111, "bounce": 4.533299376034637}, {"sends": 957484, "ppr": 137.55951715386374, "proj": 20.106863404505976, "or_": null, "ctr": 26.693918645115737, "bounce": 8.106662878961945}, {"sends": 247827, "ppr": 291.80711780126194, "proj": 39.027224636540815, "or_": null, "ctr": 31.767321558990748, "bounce": 5.1293846110391526}, {"sends": 194706, "ppr": 386.21993469213425, "proj": 50.85102667611682, "or_": null, "ctr": 34.74725997144413, "bounce": 4.18579807504648}, {"sends": 185132, "ppr": 362.44376985070113, "proj": 56.59205323768986, "or_": null, "ctr": 34.66877687271784, "bounce": 4.046302097962535}, {"sends": 183260, "ppr": 477.33443513769146, "proj": 84.33919022154316, "or_": null, "ctr": 34.95143511950234, "bounce": 4.011240859980355}, {"sends": 189638, "ppr": 438.00130885335926, "proj": 81.43937396513357, "or_": null, "ctr": 34.874339531106635, "bounce": 3.7503032092724036}, {"sends": 275544, "ppr": 318.3710064983572, "proj": 57.05440873326946, "or_": null, "ctr": 27.660192201608453, "bounce": 2.519016926516273}, {"sends": 157625, "ppr": 440.1927800687286, "proj": 75.2355273592387, "or_": null, "ctr": 31.201903251387787, "bounce": 3.0445678033306898}, {"sends": 163864, "ppr": 396.23846604501296, "proj": 66.01205878045208, "or_": null, "ctr": 35.40130840208954, "bounce": 2.8700629790558025}]}};
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,section').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById(b.dataset.t).classList.add('on');});
+const fmt={sends:v=>v.toLocaleString('en-GB',{maximumFractionDigits:0}),pct:v=>v.toFixed(2)+'%',gbp:v=>'£'+v.toFixed(2),num:v=>v.toFixed(2)};
+const COL=['#2a6df4','#e0661b','#1a9e5c'];
+function mk(id,ctlId,metrics,src,dual){
+  let chart,cur=metrics[0];const ctl=document.getElementById(ctlId);
+  metrics.forEach(m=>{const b=document.createElement('button');b.textContent=m.label;b.onclick=()=>{cur=m;draw();[...ctl.children].forEach(x=>x.classList.toggle('on',x===b));};ctl.appendChild(b);});
+  ctl.firstChild.classList.add('on');
+  function draw(){
+    const chs=Object.keys(src).filter(c=>src[c].some(r=>r[cur.key]!=null && (cur.only?cur.only.some(o=>c.includes(o)):true)));
+    const ds=chs.map((c,i)=>({label:c,data:src[c].map(r=>r[cur.key]),borderColor:COL[i],backgroundColor:COL[i],tension:.25,pointRadius:3,spanGaps:false,yAxisID:dual&&i==1?'y1':'y'}));
+    const sc={y:{beginAtZero:true,ticks:{callback:v=>fmt[cur.f](v)},title:{display:dual,text:chs[0]}}};
+    if(dual&&chs.length>1) sc.y1={position:'right',beginAtZero:true,grid:{drawOnChartArea:false},ticks:{callback:v=>fmt[cur.f](v)},title:{display:true,text:chs[1]}};
+    chart&&chart.destroy();
+    chart=new Chart(document.getElementById(id),{type:'line',data:{labels:T.labels,datasets:ds},options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw==null?'n/a':fmt[cur.f](c.raw))}}},scales:sc,font:{family:'IBM Plex Mono'}}});
   }
-  function psVal(r,m,name){
-    var isSMS = name==='SMS Marketing';
-    if(m==='sends') return r[0];
-    if(m==='or') return isSMS?null:r[1]/r[0]*100;
-    if(m==='ctr') return isSMS?r[2]/r[0]*100:null;
-    if(m==='bounce') return isSMS?r[3]/r[0]*100:null;
-    if(m==='ppr') return r[4]/(r[0]/1000);
-    return r[5]/(r[0]/1000);
-  }
-  function suffix(m){ return m==='sends'?'':(m==='ppr'?'':(m==='proj'?'':'%')); }
-  function fmtv(v,m){
-    if(v==null) return 'n/a';
-    if(m==='sends') return v>=1e6?(v/1e6).toFixed(1)+'M':(v/1e3).toFixed(0)+'K';
-    if(m==='ppr') return '£'+v.toFixed(2);
-    if(m==='proj') return v.toFixed(2);
-    return v.toFixed(2)+'%';
-  }
-
-  function render(svgId, data, valFn, metric){
-    var svg=document.getElementById(svgId); svg.innerHTML='';
-    var W=1000,H=340,L=72,R=20,T=18,B=46, iw=W-L-R, ih=H-T-B;
-    var names=Object.keys(data);
-    var series=names.map(function(n){
-      return {name:n, pts:data[n].map(function(r){ return valFn(r,metric,n); })};
-    }).filter(function(s){ return s.pts.some(function(v){ return v!=null; }); });
-    var all=[]; series.forEach(function(s){ s.pts.forEach(function(v){ if(v!=null) all.push(v); }); });
-    var max=Math.max.apply(null,all)||1; max=max*1.12;
-    var y=function(v){ return T+ih-(v/max)*ih; };
-    var x=function(i){ return L+(iw/11)*i; };
-    for(var k=0;k<=4;k++){
-      var v=max*k/4;
-      svg.appendChild(el('line',{x1:L,x2:W-R,y1:y(v),y2:y(v),class:'gridline'}));
-      svg.appendChild(el('text',{x:L-10,y:y(v)+3.5,class:'tick','text-anchor':'end'},fmtv(v,metric)));
-    }
-    series.forEach(function(s){
-      var col=COL[s.name];
-      var d='', started=false;
-      s.pts.forEach(function(v,i){ if(v==null) return; d+=(started?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1); started=true; });
-      if(d) svg.appendChild(el('path',{d:d,fill:'none',stroke:col,'stroke-width':2.5,'stroke-linejoin':'round','stroke-linecap':'round'}));
-      s.pts.forEach(function(v,i){
-        if(v==null) return;
-        svg.appendChild(el('circle',{cx:x(i),cy:y(v),r:4,fill:col,stroke:'#fff','stroke-width':2}));
-        var tt=el('title',{}, s.name+' · '+MONTHS[i]+' · '+fmtv(v,metric));
-        var hit=el('circle',{cx:x(i),cy:y(v),r:13,fill:'transparent'}); hit.appendChild(tt);
-        svg.appendChild(hit);
-      });
-    });
-    MONTHS.forEach(function(m,i){
-      svg.appendChild(el('text',{x:x(i),y:H-B+20,class:'tick','text-anchor':'middle'},m));
-    });
-    svg.appendChild(el('line',{x1:L,x2:W-R,y1:y(0),y2:y(0),class:'baseline'}));
-    return series.map(function(s){ return s.name; });
-  }
-
-  function draw(){ render('em-chart', EM, emVal, document.getElementById('em-metric').value); }
-  function drawPS(){
-    var m=document.getElementById('ps-metric').value;
-    var shown=render('ps-chart', PS, psVal, m);
-    document.getElementById('ps-legend').innerHTML = shown.map(function(n){
-      return '<span><i class="sw" style="background:'+COL[n]+'"></i>'+n+'</span>';
-    }).join('') + (shown.length<3 ? '<span style="color:#8a90a6">Channels without this metric are hidden</span>' : '');
-  }
-  document.getElementById('em-metric').addEventListener('change',draw);
-  document.getElementById('ps-metric').addEventListener('change',drawPS);
-  draw(); drawPS();
-})();
-</script>
-</body>
-</html>
+  draw();
+}
+mk('ch3','c3',[{key:'sends',label:'Sends',f:'sends'},{key:'or_',label:'Open rate',f:'pct'},{key:'ctr',label:'CTR',f:'pct'},{key:'unsub',label:'Unsub rate',f:'pct'},{key:'bounce',label:'Bounce rate',f:'pct'},{key:'ppr',label:'PPR / 1k',f:'gbp'},{key:'proj',label:'Proj / 1k',f:'num'}],T.em,true);
+mk('ch4','c4',[{key:'sends',label:'Sends',f:'sends'},{key:'or_',label:'Open rate (push)',f:'pct'},{key:'ctr',label:'CTR (SMS)',f:'pct'},{key:'bounce',label:'Bounce rate (SMS)',f:'pct'},{key:'ppr',label:'PPR / 1k',f:'gbp'},{key:'proj',label:'Proj / 1k',f:'num'}],T.ps,false);
+</script></body></html>
